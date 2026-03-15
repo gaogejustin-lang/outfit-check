@@ -776,8 +776,9 @@
             document.getElementById('searchBtn').disabled = true;
             
             try {
-                // 1. 获取城市坐标
-                const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=zh&format=json`);
+                // 1. 获取城市坐标（获取多个结果以便筛选）
+                const searchName = city.endsWith('市') ? city : city + '市';
+                const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchName)}&count=10&language=zh&format=json`);
                 
                 if (!geoResponse.ok) {
                     throw new Error('网络请求失败，请检查网络连接');
@@ -789,7 +790,21 @@
                     throw new Error('未找到该城市，请检查城市名称');
                 }
                 
-                const location = geoData.results[0];
+                // 优先选择名字完全匹配中国大陆的结果
+                let location = geoData.results.find(r => 
+                    r.country_code === 'CN' && 
+                    (r.name === city || r.name === searchName)
+                );
+                
+                // 如果没找到完全匹配，优先选中国大陆的
+                if (!location) {
+                    location = geoData.results.find(r => r.country_code === 'CN');
+                }
+                
+                // 如果还是没有，用第一个结果
+                if (!location) {
+                    location = geoData.results[0];
+                }
                 
                 // 2. 获取天气数据（包含风速）
                 const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&daily=temperature_2m_max,temperature_2m_min,weather_code&current=wind_speed_10m,wind_direction_10m&timezone=auto&forecast_days=2`);
@@ -874,13 +889,33 @@
             // 更新风信息
             document.getElementById('windInfo').textContent = `${windInfo.icon} ${windDirText}风 ${windInfo.level} · ${windInfo.desc}`;
             
-            // 确定温度区间
+            // 确定温度区间（考虑地理位置调整）
             let tempZone;
-            const avgTemp = (maxTemp + minTemp) / 2;
-            if (avgTemp < 0) tempZone = 'freezing';
-            else if (avgTemp < 10) tempZone = 'cold';
-            else if (avgTemp < 20) tempZone = 'cool';
-            else if (avgTemp < 28) tempZone = 'warm';
+            let avgTemp = (maxTemp + minTemp) / 2;
+            
+            // 根据地理位置调整体感温度
+            const isHighAltitude = location.elevation > 1500; // 高原
+            const isSouthernWet = ['广东', '广西', '福建', '海南', '云南'].includes(location.admin1); // 南方湿热
+            const isNorthernDry = ['黑龙江', '吉林', '辽宁', '内蒙古', '河北', '山西', '陕西', '甘肃', '宁夏'].includes(location.admin1); // 北方干冷
+            const isCoastal = ['上海', '天津', '浙江', '山东', '江苏', '辽宁'].includes(location.admin1) || location.name.includes('青岛') || location.name.includes('大连') || location.name.includes('厦门'); // 沿海
+            
+            // 体感温度调整
+            let feelsLikeTemp = avgTemp;
+            if (isHighAltitude) {
+                feelsLikeTemp -= 3; // 高原风大，体感更冷
+            }
+            if (isSouthernWet && avgTemp < 15) {
+                feelsLikeTemp -= 2; // 南方湿冷，体感更冷
+            }
+            if (isNorthernDry && avgTemp > 20) {
+                feelsLikeTemp += 2; // 北方干燥，体感更暖
+            }
+            
+            // 根据体感温度确定区间
+            if (feelsLikeTemp < 0) tempZone = 'freezing';
+            else if (feelsLikeTemp < 10) tempZone = 'cold';
+            else if (feelsLikeTemp < 20) tempZone = 'cool';
+            else if (feelsLikeTemp < 28) tempZone = 'warm';
             else tempZone = 'hot';
             
             const outfit = outfitDatabase[tempZone];
@@ -895,17 +930,35 @@
                 return `<span class="${className}">${tag}</span>`;
             }).join('');
             
-            // 添加风大标签
+            // 添加特殊气候标签
+            if (isHighAltitude) {
+                tagsHtml += `<span class="tag" style="background: #fff3e0; color: #e65100;">☀️ 高海拔·防晒</span>`;
+            }
+            if (isCoastal && windSpeed > 15) {
+                tagsHtml += `<span class="tag" style="background: #e3f2fd; color: #1976d2;">🌊 沿海·防风</span>`;
+            }
+            if (isSouthernWet && avgTemp < 15) {
+                tagsHtml += `<span class="tag" style="background: #e8f5e9; color: #2e7d32;">💧 湿冷·保暖</span>`;
+            }
             if (isWindy) {
-                tagsHtml += `<span class="tag" style="background: #e3f2fd; color: #1976d2;">💨 风大</span>`;
+                tagsHtml += `<span class="tag" style="background: #f3e5f5; color: #7b1fa2;">💨 风大</span>`;
             }
             
             document.getElementById('weatherTags').innerHTML = tagsHtml;
             
-            // 更新提示（包含风的信息）
+            // 更新提示（包含地理位置信息）
             let tipsText = outfit.tips;
             if (isWindy) {
                 tipsText += ' ' + outfit.windTips;
+            }
+            if (isHighAltitude) {
+                tipsText += ' 高原地区紫外线强，注意防晒。';
+            }
+            if (isSouthernWet && avgTemp < 15) {
+                tipsText += ' 南方湿冷，建议穿防水外套。';
+            }
+            if (isCoastal && windSpeed > 15) {
+                tipsText += ' 沿海风大，注意防风保暖。';
             }
             document.getElementById('tipsContent').textContent = tipsText;
             
@@ -925,6 +978,23 @@
                     casualItems.push('🧢 帽子戴好，别被风吹跑');
                     trendyItems.push('🧥 选择有帽子的外套更实用');
                 }
+            }
+            
+            // 根据地理位置添加特殊建议
+            if (isHighAltitude) {
+                commuteItems.push('🕶️ 戴墨镜防晒（高原紫外线强）');
+                casualItems.push('🧴 涂防晒霜，戴遮阳帽');
+                trendyItems.push('🕶️ 时尚墨镜是高原必备');
+            }
+            if (isSouthernWet && avgTemp < 15) {
+                commuteItems.push('☔ 备把折叠伞防雨');
+                casualItems.push('👟 穿防水鞋或雨靴');
+                trendyItems.push('🧥 防水风衣既实用又时髦');
+            }
+            if (isCoastal && windSpeed > 15) {
+                commuteItems.push('🧥 海边风大，外套别选太飘的');
+                casualItems.push('🧢 帽子要系紧或戴有绳子的');
+                trendyItems.push('🕶️ 防风镜或墨镜挡海风');
             }
             
             // 更新穿搭图片
