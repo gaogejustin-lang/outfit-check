@@ -2,608 +2,452 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>每日穿搭指南 - 智能天气穿搭</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 16px;
         }
         
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-        }
+        .container { max-width: 480px; margin: 0 auto; }
         
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 24px;
-        }
+        /* Header */
+        .header { text-align: center; color: white; margin-bottom: 16px; }
+        .header h1 { font-size: 24px; font-weight: 600; }
+        .header .subtitle { opacity: 0.9; font-size: 13px; margin-top: 4px; }
         
-        .header h1 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .header .subtitle {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-        
-        /* 城市搜索 */
+        /* Search */
         .search-card {
             background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
         
-        .search-box {
-            display: flex;
-            gap: 10px;
-        }
+        .search-box { display: flex; gap: 8px; }
         
         .search-input {
             flex: 1;
-            padding: 14px 18px;
+            padding: 12px 14px;
             border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 15px;
             outline: none;
-            transition: border-color 0.3s;
         }
         
-        .search-input:focus {
-            border-color: #667eea;
-        }
+        .search-input:focus { border-color: #667eea; }
         
         .search-btn {
-            padding: 14px 24px;
+            padding: 12px 20px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
         }
         
-        .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
+        .search-btn:disabled { opacity: 0.6; }
         
-        .search-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        /* 热门城市 */
         .hot-cities {
-            margin-top: 16px;
+            margin-top: 12px;
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
+            align-items: center;
         }
         
-        .hot-cities-label {
-            font-size: 13px;
-            color: #888;
-            margin-right: 4px;
-            padding: 6px 0;
-        }
+        .hot-cities-label { font-size: 12px; color: #888; }
         
         .city-tag {
-            padding: 6px 14px;
+            padding: 5px 12px;
             background: #f5f5f5;
             border: none;
-            border-radius: 20px;
-            font-size: 13px;
+            border-radius: 16px;
+            font-size: 12px;
             color: #555;
             cursor: pointer;
-            transition: all 0.2s;
         }
         
-        .city-tag:hover {
-            background: #667eea;
-            color: white;
-        }
-        
-        /* 加载状态 */
+        /* Loading */
         .loading {
             text-align: center;
-            padding: 40px;
+            padding: 30px;
             color: white;
+            font-size: 14px;
         }
         
         .loading-spinner {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border: 3px solid rgba(255,255,255,0.3);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
+            margin: 0 auto 12px;
         }
         
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
         
-        /* 日期徽章 */
-        .date-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            margin-top: 12px;
-        }
-        
-        /* 天气卡片 */
+        /* Weather Card */
         .weather-card {
             background: white;
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
         }
         
-        .location-name {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
+        .location-name { font-size: 18px; font-weight: 600; }
+        .location-detail { font-size: 12px; color: #888; margin-top: 2px; }
         
-        .location-detail {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 16px;
+        .date-badge {
+            display: inline-block;
+            background: #f5f5f5;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-top: 8px;
         }
         
         .weather-main {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin: 12px 0;
         }
         
-        .weather-icon {
-            font-size: 64px;
-        }
+        .weather-icon { font-size: 52px; }
         
-        .weather-info {
-            text-align: right;
-        }
-        
-        .temp-range {
-            font-size: 36px;
-            font-weight: 700;
-            color: #333;
-        }
-        
-        .weather-desc {
-            font-size: 16px;
-            color: #666;
-            margin-top: 4px;
-        }
+        .weather-info { text-align: right; }
+        .temp-range { font-size: 28px; font-weight: 700; }
+        .weather-desc { font-size: 14px; color: #666; margin-top: 2px; }
+        .wind-info { font-size: 12px; color: #888; margin-top: 4px; }
         
         .weather-tags {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
+            margin-top: 10px;
         }
         
         .tag {
             background: #f5f5f5;
-            padding: 6px 12px;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        
+        .tag.highlight { background: #667eea; color: white; }
+        .tag.cold { background: #e3f2fd; color: #1976d2; }
+        .tag.hot { background: #ffebee; color: #c62828; }
+        .tag.rain { background: #e8f5e9; color: #2e7d32; }
+        
+        /* Tips */
+        .tips-card {
+            background: linear-gradient(135deg, #fff9e6, #fff3cd);
             border-radius: 12px;
-            font-size: 13px;
-            color: #555;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            border-left: 3px solid #ffc107;
         }
         
-        .tag.highlight {
-            background: #667eea;
-            color: white;
-        }
+        .tips-title { font-size: 13px; font-weight: 600; color: #856404; }
+        .tips-content { font-size: 12px; color: #856404; margin-top: 4px; line-height: 1.5; }
         
-        .tag.cold {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-        
-        .tag.hot {
-            background: #ffebee;
-            color: #c62828;
-        }
-        
-        .tag.rain {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-        
-        /* 穿搭卡片 */
-        .outfit-section {
-            margin-bottom: 16px;
-        }
+        /* Outfit Section */
+        .outfit-section { margin-bottom: 12px; }
         
         .section-title {
             color: white;
-            font-size: 18px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 15px;
+            margin-bottom: 8px;
         }
         
         .outfit-card {
             background: white;
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 12px;
         }
         
         .outfit-image {
             width: 100%;
-            height: 200px;
-            background: linear-gradient(45deg, #f5f5f5, #e8e8e8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 48px;
+            height: 180px;
+            background: #f5f5f5;
             overflow: hidden;
-            position: relative;
         }
         
         .outfit-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
         }
         
-        .outfit-image:hover img {
-            transform: scale(1.05);
-        }
-        
-        .outfit-image-placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            font-size: 48px;
-        }
-        
-        .outfit-content {
-            padding: 20px;
-        }
+        .outfit-content { padding: 14px; }
         
         .outfit-style {
-            font-size: 12px;
+            font-size: 11px;
             color: #667eea;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
         }
         
-        .outfit-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 12px;
-        }
+        .outfit-title { font-size: 15px; font-weight: 600; margin: 4px 0 10px; }
         
         .outfit-items {
             list-style: none;
-            margin-bottom: 16px;
+            font-size: 13px;
+            color: #555;
         }
         
         .outfit-items li {
-            padding: 8px 0;
+            padding: 6px 0;
             border-bottom: 1px dashed #eee;
-            color: #555;
-            font-size: 14px;
             display: flex;
             align-items: center;
+            gap: 6px;
+        }
+        
+        .outfit-items li:last-child { border-bottom: none; }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
             gap: 8px;
+            margin-top: 12px;
         }
         
-        .outfit-items li:last-child {
-            border-bottom: none;
-        }
-        
-        .xiaohongshu-link {
+        .btn-primary {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             background: #ff2442;
             color: white;
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 10px;
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
         }
         
-        .xiaohongshu-link:hover {
-            background: #e0203c;
-        }
-        
-        /* 提示卡片 */
-        .tips-card {
-            background: linear-gradient(135deg, #fff9e6, #fff3cd);
-            border-radius: 16px;
-            padding: 16px 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid #ffc107;
-        }
-        
-        .tips-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #856404;
-            margin-bottom: 8px;
-        }
-        
-        .tips-content {
+        .btn-secondary {
+            padding: 12px 16px;
+            background: #f5f5f5;
+            color: #555;
+            border-radius: 10px;
+            text-decoration: none;
             font-size: 13px;
-            color: #856404;
-            line-height: 1.6;
+            border: none;
+            cursor: pointer;
         }
         
-        /* 趋势板块 */
-        .trends-card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
+        .btn-primary:active { background: #e0203c; }
+        .btn-secondary:active { background: #e0e0e0; }
         
-        .trends-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #333;
-        }
-        
-        .trend-tag {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            margin: 4px;
-        }
-        
+        /* Footer */
         .footer {
             text-align: center;
             color: rgba(255,255,255,0.7);
-            font-size: 12px;
-            margin-top: 32px;
-            padding-bottom: 20px;
+            font-size: 11px;
+            margin-top: 20px;
+            padding-bottom: 16px;
         }
         
-        /* 隐藏元素 */
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
         
-        /* 错误提示 */
         .error-message {
             background: #ffebee;
             color: #c62828;
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-top: 12px;
-            font-size: 14px;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 13px;
         }
         
-        /* 响应式 */
-        @media (max-width: 480px) {
-            body {
-                padding: 16px;
+        /* Desktop enhancements */
+        @media (min-width: 768px) {
+            body { padding: 24px; }
+            .container { max-width: 680px; }
+            .header h1 { font-size: 28px; }
+            
+            .outfit-card {
+                display: flex;
+                flex-direction: row;
             }
             
-            .header h1 {
-                font-size: 24px;
+            .outfit-image {
+                width: 280px;
+                height: auto;
+                min-height: 220px;
             }
             
-            .temp-range {
-                font-size: 28px;
-            }
-            
-            .search-box {
+            .outfit-content {
+                flex: 1;
+                display: flex;
                 flex-direction: column;
+                justify-content: center;
             }
             
-            .search-btn {
-                width: 100%;
-            }
+            .outfit-title { font-size: 17px; }
+            .outfit-items { font-size: 14px; }
         }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .toast.show { opacity: 1; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <h1>👔 每日穿搭指南</h1>
             <div class="subtitle">输入城市，获取智能穿搭建议</div>
         </div>
         
-        <!-- 城市搜索 -->
         <div class="search-card">
             <div class="search-box">
-                <input type="text" class="search-input" id="cityInput" placeholder="输入城市名称，如：北京、上海、广州..." value="北京">
+                <input type="text" class="search-input" id="cityInput" placeholder="输入城市，如：北京、上海..." value="北京">
                 <button class="search-btn" id="searchBtn" onclick="searchCity()">获取穿搭</button>
             </div>
             <div class="hot-cities">
-                <span class="hot-cities-label">热门城市：</span>
+                <span class="hot-cities-label">热门：</span>
                 <button class="city-tag" onclick="setCity('北京')">北京</button>
                 <button class="city-tag" onclick="setCity('上海')">上海</button>
                 <button class="city-tag" onclick="setCity('广州')">广州</button>
                 <button class="city-tag" onclick="setCity('深圳')">深圳</button>
-                <button class="city-tag" onclick="setCity('成都')">成都</button>
                 <button class="city-tag" onclick="setCity('杭州')">杭州</button>
-                <button class="city-tag" onclick="setCity('武汉')">武汉</button>
-                <button class="city-tag" onclick="setCity('西安')">西安</button>
+                <button class="city-tag" onclick="setCity('成都')">成都</button>
             </div>
             <div id="errorContainer"></div>
         </div>
         
-        <!-- 加载状态 -->
         <div class="loading hidden" id="loadingState">
             <div class="loading-spinner"></div>
             <div>正在获取天气数据...</div>
         </div>
         
-        <!-- 结果区域 -->
         <div id="resultContainer">
-            <!-- 天气卡片 -->
+            <!-- Weather -->
             <div class="weather-card">
                 <div class="location-name" id="locationName">北京</div>
-                <div class="location-detail" id="locationDetail">中国 · 北京市</div>
-                <div class="date-badge" id="currentDate">3月16日 星期一</div>
+                <div class="location-detail" id="locationDetail">中国</div>
+                <div class="date-badge" id="currentDate">--</div>
                 
-                <div class="weather-main" style="margin-top: 16px;">
+                <div class="weather-main">
                     <div class="weather-icon" id="weatherIcon">☁️</div>
                     <div class="weather-info">
-                        <div class="temp-range" id="tempRange">2° ~ 15°</div>
-                        <div class="weather-desc" id="weatherDesc">多云转阴</div>
-                        <div style="font-size: 13px; color: #888; margin-top: 6px;" id="windInfo">🍃 东北风 2-3级 · 轻风</div>
+                        <div class="temp-range" id="tempRange">--° ~ --°</div>
+                        <div class="weather-desc" id="weatherDesc">--</div>
+                        <div class="wind-info" id="windInfo">--</div>
                     </div>
                 </div>
-                <div class="weather-tags" id="weatherTags">
-                    <span class="tag highlight">温差大</span>
-                    <span class="tag">需叠穿</span>
-                    <span class="tag">早晚凉</span>
-                    <span class="tag">中午暖</span>
-                </div>
+                <div class="weather-tags" id="weatherTags"></div>
             </div>
             
-            <!-- 穿搭提示 -->
+            <!-- Tips -->
             <div class="tips-card">
                 <div class="tips-title">💡 穿搭小贴士</div>
-                <div class="tips-content" id="tipsContent">
-                    今日温差较大，建议采用洋葱式叠穿法。早晨出门穿外套，中午热了可以脱掉。
-                </div>
+                <div class="tips-content" id="tipsContent">--</div>
             </div>
             
-            <!-- 穿搭方案 -->
+            <!-- Outfit: Commute -->
             <div class="outfit-section">
                 <div class="section-title">💼 通勤干练风</div>
                 <div class="outfit-card">
-                    <div class="outfit-image" id="commuteImage">
-                        <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=400&fit=crop" alt="通勤穿搭" loading="lazy">
-                    </div>
+                    <div class="outfit-image" id="commuteImage"></div>
                     <div class="outfit-content">
                         <div class="outfit-style">Commute Style</div>
-                        <div class="outfit-title" id="commuteTitle">知性优雅 办公室首选</div>
-                        <ul class="outfit-items" id="commuteItems">
-                            <li>🧥 摩卡慕斯色风衣 / 毛呢大衣</li>
-                            <li>👔 白色高领打底衫</li>
-                            <li>👖 深蓝直筒西裤</li>
-                            <li>👞 乐福鞋 / 切尔西靴</li>
-                            <li>💎 简约金属项链 + 皮质手提包</li>
-                        </ul>
-                        <a href="#" class="xiaohongshu-link" id="commuteLink" target="_blank" onclick="return handleXHSLink(this);">
-                            <span>📕</span>
-                            <span>小红书查看搭配图</span>
-                        </a>
-                        <div class="xhs-hint" id="commuteHint" style="display:none; font-size:12px; color:#999; margin-top:5px;">💡 微信内无法跳转，请复制链接到浏览器打开</div>
+                        <div class="outfit-title" id="commuteTitle">--</div>
+                        <ul class="outfit-items" id="commuteItems"></ul>
+                        <div class="action-buttons">
+                            <button class="btn-primary" id="commuteBtn" onclick="handleAction('commute')">
+                                <span>📕</span>
+                                <span id="commuteBtnText">小红书查看</span>
+                            </button>
+                            <button class="btn-secondary" onclick="copyLink('commute')">复制链接</button>
+                        </div>
                     </div>
                 </div>
             </div>
             
+            <!-- Outfit: Casual -->
             <div class="outfit-section">
                 <div class="section-title">👟 休闲舒适风</div>
                 <div class="outfit-card">
-                    <div class="outfit-image" id="casualImage">
-                        <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&h=400&fit=crop" alt="休闲穿搭" loading="lazy">
-                    </div>
+                    <div class="outfit-image" id="casualImage"></div>
                     <div class="outfit-content">
                         <div class="outfit-style">Casual Style</div>
-                        <div class="outfit-title" id="casualTitle">轻松随性 日常出街</div>
-                        <ul class="outfit-items" id="casualItems">
-                            <li>🧥 浅色轻薄羽绒服</li>
-                            <li>👕 连帽卫衣 / 针织衫</li>
-                            <li>👖 阔腿裤 / 直筒牛仔裤</li>
-                            <li>👟 运动鞋 / 老爹鞋</li>
-                            <li>🧢 棒球帽 + 帆布袋</li>
-                        </ul>
-                        <a href="#" class="xiaohongshu-link" id="casualLink" target="_blank" onclick="return handleXHSLink(this);">
-                            <span>📕</span>
-                            <span>小红书查看搭配图</span>
-                        </a>
-                        <div class="xhs-hint" id="casualHint" style="display:none; font-size:12px; color:#999; margin-top:5px;">💡 微信内无法跳转，请复制链接到浏览器打开</div>
+                        <div class="outfit-title" id="casualTitle">--</div>
+                        <ul class="outfit-items" id="casualItems"></ul>
+                        <div class="action-buttons">
+                            <button class="btn-primary" id="casualBtn" onclick="handleAction('casual')">
+                                <span>📕</span>
+                                <span id="casualBtnText">小红书查看</span>
+                            </button>
+                            <button class="btn-secondary" onclick="copyLink('casual')">复制链接</button>
+                        </div>
                     </div>
                 </div>
             </div>
             
+            <!-- Outfit: Trendy -->
             <div class="outfit-section">
                 <div class="section-title">✨ 时髦层次感</div>
                 <div class="outfit-card">
-                    <div class="outfit-image" id="trendyImage">
-                        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=400&fit=crop" alt="时髦穿搭" loading="lazy">
-                    </div>
+                    <div class="outfit-image" id="trendyImage"></div>
                     <div class="outfit-content">
                         <div class="outfit-style">Trendy Style</div>
-                        <div class="outfit-title" id="trendyTitle">2025秀场同款 吸睛出片</div>
-                        <ul class="outfit-items" id="trendyItems">
-                            <li>🧥 廓形西装外套（Saint Laurent风）</li>
-                            <li>👔 透明感衬衫 + 内搭背心</li>
-                            <li>👖 高腰牛仔裤 / 格纹阔腿裤</li>
-                            <li>👢 短靴 / 厚底乐福鞋</li>
-                            <li>🕶️ 复古手链 + 宽边太阳镜</li>
-                        </ul>
-                        <a href="#" class="xiaohongshu-link" id="trendyLink" target="_blank" onclick="return handleXHSLink(this);">
-                            <span>📕</span>
-                            <span>小红书查看搭配图</span>
-                        </a>
-                        <div class="xhs-hint" id="trendyHint" style="display:none; font-size:12px; color:#999; margin-top:5px;">💡 微信内无法跳转，请复制链接到浏览器打开</div>
+                        <div class="outfit-title" id="trendyTitle">--</div>
+                        <ul class="outfit-items" id="trendyItems"></ul>
+                        <div class="action-buttons">
+                            <button class="btn-primary" id="trendyBtn" onclick="handleAction('trendy')">
+                                <span>📕</span>
+                                <span id="trendyBtnText">小红书查看</span>
+                            </button>
+                            <button class="btn-secondary" onclick="copyLink('trendy')">复制链接</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- 流行趋势 -->
-            <div class="trends-card">
-                <div class="trends-title">🔥 本季流行元素</div>
-                <span class="trend-tag">摩卡慕斯色</span>
-                <span class="trend-tag">透明感衬衫</span>
-                <span class="trend-tag">廓形西装</span>
-                <span class="trend-tag">运动风外套</span>
-                <span class="trend-tag">格纹元素</span>
             </div>
         </div>
         
         <div class="footer">
-            智能穿搭指南 · 基于实时天气数据<br>
-            数据来源：Open-Meteo 天气预报
+            智能穿搭指南 · 数据来源：Open-Meteo<br>
+            <span id="platformInfo"></span>
         </div>
     </div>
     
+    <div class="toast" id="toast"></div>
+
     <script>
-        // 天气代码映射
+        // ========== 配置数据 ==========
         const weatherCodes = {
             0: { icon: '☀️', desc: '晴朗' },
             1: { icon: '🌤️', desc: '多云' },
@@ -623,11 +467,9 @@
             95: { icon: '⛈️', desc: '雷雨' },
         };
         
-        // 风向映射
-        const windDirections = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
+        const windDirs = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
         
-        // 获取风力等级描述
-        function getWindLevel(speed) {
+        function getWind(speed) {
             if (speed < 5) return { level: '1级', desc: '微风', icon: '🍃' };
             if (speed < 12) return { level: '2-3级', desc: '轻风', icon: '🌿' };
             if (speed < 20) return { level: '4级', desc: '和风', icon: '🌾' };
@@ -636,457 +478,321 @@
             return { level: '7级+', desc: '大风', icon: '💨' };
         }
         
-        // 穿搭图片数据库（Unsplash）
-        const outfitImages = {
-            freezing: {
-                commute: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=400&fit=crop',
-                casual: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=400&fit=crop',
-                trendy: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=400&fit=crop'
-            },
-            cold: {
-                commute: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=400&fit=crop',
-                casual: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&h=400&fit=crop',
-                trendy: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop'
-            },
-            cool: {
-                commute: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=400&fit=crop',
-                casual: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=400&fit=crop',
-                trendy: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=400&fit=crop'
-            },
-            warm: {
-                commute: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&h=400&fit=crop',
-                casual: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=400&fit=crop',
-                trendy: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=400&fit=crop'
-            },
-            hot: {
-                commute: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&h=400&fit=crop',
-                casual: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=400&fit=crop',
-                trendy: 'https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?w=600&h=400&fit=crop'
-            }
+        const outfitImgs = {
+            freezing: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=400&fit=crop',
+            cold: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=400&fit=crop',
+            cool: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=400&fit=crop',
+            warm: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=400&fit=crop',
+            hot: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=400&fit=crop'
         };
         
-        // 穿搭数据库
-        const outfitDatabase = {
-            // 极寒 (< 0°C)
+        const outfitDB = {
             freezing: {
-                tips: '天气寒冷，注意保暖！建议穿羽绒服、厚毛衣，戴上围巾手套。',
-                windTips: '风大时体感更冷，记得戴帽子和围巾挡风。',
+                tips: '极寒天气！羽绒服、厚毛衣、围巾手套必备。注意防风保暖。',
                 tags: ['极寒', '羽绒服', '保暖'],
-                commute: {
-                    title: '严寒通勤 保暖为先',
-                    items: ['🧥 长款羽绒服 / 厚毛呢大衣', '👔 高领毛衣 + 保暖内衣', '👖 加绒西裤 / 羊毛裤', '👢 雪地靴 / 加绒短靴', '🧣 围巾 + 手套 + 毛线帽']
-                },
-                casual: {
-                    title: '冬日休闲 温暖包裹',
-                    items: ['🧥 加厚羽绒服 / 棉服', '👕 加绒卫衣 / 厚毛衣', '👖 加绒牛仔裤 / 运动裤', '👟 加绒运动鞋 / 雪地靴', '🧢 针织帽 + 围巾']
-                },
-                trendy: {
-                    title: '冬日时髦 保暖不臃肿',
-                    items: ['🧥 收腰羽绒服（显瘦款）', '👔 羊绒衫 + 衬衫叠穿', '👖 高腰阔腿裤 + 保暖裤', '👢 厚底马丁靴', '🕶️ 毛绒耳罩 + 墨镜']
-                }
+                titles: { commute: '严寒通勤 保暖为先', casual: '冬日休闲 温暖包裹', trendy: '冬日时髦 保暖不臃肿' },
+                items: [
+                    '🧥 长款羽绒服 / 厚毛呢大衣',
+                    '👔 高领毛衣 + 保暖内衣',
+                    '👖 加绒西裤 / 羊毛裤',
+                    '👢 雪地靴 / 加绒短靴',
+                    '🧣 围巾 + 手套 + 毛线帽'
+                ]
             },
-            // 寒冷 (0-10°C)
             cold: {
                 tips: '天气较冷，建议叠穿。外套+毛衣组合，方便根据温度调整。',
-                windTips: '有风天气建议加条围巾或穿带帽外套，防止冷风灌入。',
                 tags: ['寒冷', '叠穿', '保暖'],
-                commute: {
-                    title: '知性优雅 保暖通勤',
-                    items: ['🧥 毛呢大衣 / 轻薄羽绒服', '👔 高领打底衫 / 针织衫', '👖 直筒西裤 / 烟管裤', '👞 乐福鞋 / 短靴', '💎 简约项链 + 皮质包']
-                },
-                casual: {
-                    title: '轻松保暖 日常出街',
-                    items: ['🧥 轻薄羽绒服 / 夹克', '👕 连帽卫衣 / 针织衫', '👖 牛仔裤 / 休闲裤', '👟 运动鞋 / 板鞋', '🧢 棒球帽 + 斜挎包']
-                },
-                trendy: {
-                    title: '层次叠穿 时髦保暖',
-                    items: ['🧥 廓形西装 + 大衣叠穿', '👔 衬衫 + 马甲 + 高领衫', '👖 格纹阔腿裤 / 工装裤', '👢 切尔西靴 / 老爹鞋', '🕶️ 金属配饰 + 贝雷帽']
-                }
+                titles: { commute: '知性优雅 保暖通勤', casual: '轻松保暖 日常出街', trendy: '层次叠穿 时髦保暖' },
+                items: [
+                    '🧥 毛呢大衣 / 轻薄羽绒服',
+                    '👔 高领打底衫 / 针织衫',
+                    '👖 直筒西裤 / 烟管裤',
+                    '👞 乐福鞋 / 短靴',
+                    '💎 简约项链 + 皮质包'
+                ]
             },
-            // 凉爽 (10-20°C)
             cool: {
                 tips: '温度适宜，正是叠穿好时节。外套方便穿脱，应对早晚温差。',
-                windTips: '风大建议穿防风外套，或带件薄风衣备用。',
                 tags: ['凉爽', '叠穿', '舒适'],
-                commute: {
-                    title: '知性优雅 办公室首选',
-                    items: ['🧥 风衣 / 薄毛呢外套', '👔 衬衫 / 薄针织衫', '👖 西裤 / 九分裤', '👞 乐福鞋 / 单鞋', '💎 简约耳环 + 手提包']
-                },
-                casual: {
-                    title: '轻松随性 舒适日常',
-                    items: ['🧥 牛仔外套 / 工装夹克', '👕 T恤 / 薄卫衣', '👖 牛仔裤 / 休闲裤', '👟 运动鞋 / 帆布鞋', '🧢 鸭舌帽 + 帆布包']
-                },
-                trendy: {
-                    title: '时髦叠穿 春日氛围',
-                    items: ['🧥 廓形西装 / 短款夹克', '👔 透明感衬衫 + 背心', '👖 高腰阔腿裤 / 半裙', '👢 短靴 / 玛丽珍鞋', '🕶️ 复古配饰 + 丝巾']
-                }
+                titles: { commute: '知性优雅 办公室首选', casual: '轻松随性 舒适日常', trendy: '时髦叠穿 春日氛围' },
+                items: [
+                    '🧥 风衣 / 薄毛呢外套',
+                    '👔 衬衫 / 薄针织衫',
+                    '👖 西裤 / 九分裤',
+                    '👞 乐福鞋 / 单鞋',
+                    '💎 简约耳环 + 手提包'
+                ]
             },
-            // 温暖 (20-28°C)
             warm: {
                 tips: '天气温暖，单穿即可。注意防晒，可带件薄外套应对空调房。',
-                windTips: '有风天气很舒适，但建议带件薄外套防风。',
                 tags: ['温暖', '单穿', '防晒'],
-                commute: {
-                    title: '清爽干练 职场丽人',
-                    items: ['🧥 薄西装 / 针织开衫（备用）', '👔 衬衫 / 薄针织衫', '👖 西裤 / 及膝裙', '👞 单鞋 / 低跟鞋', '💎 精致项链 + 简约包']
-                },
-                casual: {
-                    title: '舒适休闲 轻松自在',
-                    items: ['👕 T恤 / Polo衫 / 薄卫衣', '👖 牛仔裤 / 短裤 / 休闲裤', '👟 运动鞋 / 帆布鞋 / 凉鞋', '🧢 渔夫帽 / 棒球帽', '🎒 双肩包 / 斜挎包']
-                },
-                trendy: {
-                    title: '春日轻盈 时髦出街',
-                    items: ['👔 短款上衣 / 露脐装', '👖 阔腿裤 / 短裙 / 连衣裙', '👟 老爹鞋 / 穆勒鞋 / 凉鞋', '🕶️ 墨镜 + 耳环 + 项链', '👜 腋下包 / 迷你包']
-                }
+                titles: { commute: '清爽干练 职场丽人', casual: '舒适休闲 轻松自在', trendy: '春日轻盈 时髦出街' },
+                items: [
+                    '🧥 薄西装 / 针织开衫（备用）',
+                    '👔 衬衫 / 薄针织衫',
+                    '👖 西裤 / 及膝裙',
+                    '👞 单鞋 / 低跟鞋',
+                    '💎 精致项链 + 简约包'
+                ]
             },
-            // 炎热 (> 28°C)
             hot: {
-                tips: '天气炎热，注意防暑降温。选择透气轻薄的面料，多喝水。',
-                windTips: '有风会凉快很多，选择透气衣物享受自然风。',
+                tips: '天气炎热！选择透气轻薄面料，注意防暑降温多喝水。',
                 tags: ['炎热', '透气', '防晒'],
-                commute: {
-                    title: '清凉干练 夏日职场',
-                    items: ['👔 短袖衬衫 / 雪纺衫', '👖 九分西裤 / 及膝裙', '👞 透气单鞋 / 低跟凉鞋', '💎 简约耳钉 + 链条包', '🧴 防晒衣（可选）']
-                },
-                casual: {
-                    title: '清凉夏日 舒适自在',
-                    items: ['👕 T恤 / 背心 / 短袖衬衫', '🩳 短裤 / 阔腿裤 / 连衣裙', '👟 凉鞋 / 帆布鞋 / 洞洞鞋', '🧢 遮阳帽 / 棒球帽', '🎒 帆布包 / 环保袋']
-                },
-                trendy: {
-                    title: '夏日时髦 清凉吸睛',
-                    items: ['👔 吊带 / 露肩上衣 / 短款T恤', '👖 高腰短裤 / A字裙 / 开叉裙', '👡 绑带凉鞋 / 厚底拖鞋', '🕶️ 大框墨镜 + 夸张耳环', '👜 草编包 / 透明包']
-                }
+                titles: { commute: '清凉干练 夏日职场', casual: '清凉夏日 舒适自在', trendy: '夏日时髦 清凉吸睛' },
+                items: [
+                    '👔 短袖衬衫 / 雪纺衫',
+                    '👖 九分西裤 / 及膝裙',
+                    '👞 透气单鞋 / 低跟凉鞋',
+                    '💎 简约耳钉 + 链条包',
+                    '🧴 防晒衣（可选）'
+                ]
             }
         };
         
-        // 设置城市
+        // ========== 平台检测 ==========
+        const platform = {
+            isIOS: /iPhone|iPad|iPod/i.test(navigator.userAgent),
+            isAndroid: /Android/i.test(navigator.userAgent),
+            isWechat: /MicroMessenger/i.test(navigator.userAgent),
+            isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+        };
+        
+        // 显示平台信息
+        let platformText = '';
+        if (platform.isWechat) platformText = '微信内置浏览器';
+        else if (platform.isIOS) platformText = 'iOS 设备';
+        else if (platform.isAndroid) platformText = 'Android 设备';
+        else platformText = '电脑端';
+        document.getElementById('platformInfo').textContent = `当前：${platformText}`;
+        
+        // 根据平台调整按钮文字
+        if (platform.isMobile && !platform.isWechat) {
+            document.getElementById('commuteBtnText').textContent = '打开小红书App';
+            document.getElementById('casualBtnText').textContent = '打开小红书App';
+            document.getElementById('trendyBtnText').textContent = '打开小红书App';
+        }
+        
+        // ========== 搜索关键词存储 ==========
+        let searchKeywords = {
+            commute: '',
+            casual: '',
+            trendy: ''
+        };
+        
+        // ========== 核心功能 ==========
         function setCity(city) {
             document.getElementById('cityInput').value = city;
             searchCity();
         }
         
-        // 搜索城市
         async function searchCity() {
             const city = document.getElementById('cityInput').value.trim();
-            if (!city) {
-                showError('请输入城市名称');
-                return;
-            }
+            if (!city) { showError('请输入城市名称'); return; }
             
-            // 显示加载状态
             document.getElementById('loadingState').classList.remove('hidden');
             document.getElementById('errorContainer').innerHTML = '';
             document.getElementById('searchBtn').disabled = true;
             
             try {
-                // 1. 获取城市坐标（获取多个结果以便筛选）
                 const searchName = city.endsWith('市') ? city : city + '市';
-                const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchName)}&count=10&language=zh&format=json`);
+                const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchName)}&count=10&language=zh&format=json`);
+                const geoData = await geoRes.json();
                 
-                if (!geoResponse.ok) {
-                    throw new Error('网络请求失败，请检查网络连接');
-                }
+                if (!geoData.results?.length) throw new Error('未找到该城市，请检查城市名称');
                 
-                const geoData = await geoResponse.json();
+                let loc = geoData.results.find(r => r.country_code === 'CN' && (r.name === city || r.name === searchName));
+                if (!loc) loc = geoData.results.find(r => r.country_code === 'CN');
+                if (!loc) loc = geoData.results[0];
                 
-                if (!geoData.results || geoData.results.length === 0) {
-                    throw new Error('未找到该城市，请检查城市名称');
-                }
+                const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc.latitude}&longitude=${loc.longitude}&daily=temperature_2m_max,temperature_2m_min,weather_code&current=wind_speed_10m,wind_direction_10m&timezone=auto&forecast_days=2`);
+                const weatherData = await weatherRes.json();
                 
-                // 优先选择名字完全匹配中国大陆的结果
-                let location = geoData.results.find(r => 
-                    r.country_code === 'CN' && 
-                    (r.name === city || r.name === searchName)
-                );
+                if (!weatherData.daily || !weatherData.current) throw new Error('天气数据格式错误');
                 
-                // 如果没找到完全匹配，优先选中国大陆的
-                if (!location) {
-                    location = geoData.results.find(r => r.country_code === 'CN');
-                }
-                
-                // 如果还是没有，用第一个结果
-                if (!location) {
-                    location = geoData.results[0];
-                }
-                
-                // 2. 获取天气数据（包含风速）
-                const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&daily=temperature_2m_max,temperature_2m_min,weather_code&current=wind_speed_10m,wind_direction_10m&timezone=auto&forecast_days=2`);
-                
-                if (!weatherResponse.ok) {
-                    throw new Error('获取天气数据失败');
-                }
-                
-                const weatherData = await weatherResponse.json();
-                
-                // 检查数据结构
-                if (!weatherData.daily || !weatherData.current) {
-                    throw new Error('天气数据格式错误');
-                }
-                
-                // 3. 更新页面
-                updatePage(location, weatherData);
-                
-            } catch (error) {
-                console.error('搜索错误:', error);
-                showError(error.message || '获取天气数据失败，请稍后重试');
-                
-                // 如果是示例数据，保持显示；否则显示错误
-                if (!document.getElementById('locationName').textContent.includes('示例')) {
-                    // 可以在这里添加降级显示
-                }
+                updatePage(loc, weatherData);
+            } catch (err) {
+                console.error(err);
+                showError(err.message || '获取天气数据失败');
             } finally {
                 document.getElementById('loadingState').classList.add('hidden');
                 document.getElementById('searchBtn').disabled = false;
             }
         }
         
-        // 显示错误
-        function showError(message) {
-            document.getElementById('errorContainer').innerHTML = `<div class="error-message">${message}</div>`;
+        function showError(msg) {
+            document.getElementById('errorContainer').innerHTML = `<div class="error-message">${msg}</div>`;
         }
         
-        // 更新页面
-        function updatePage(location, weatherData) {
-            const daily = weatherData.daily;
-            const current = weatherData.current;
-            const tomorrow = 1; // 明天的数据索引
+        function updatePage(loc, data) {
+            const daily = data.daily;
+            const current = data.current;
+            const maxT = Math.round(daily.temperature_2m_max[1]);
+            const minT = Math.round(daily.temperature_2m_min[1]);
+            const code = daily.weather_code[1];
+            const wind = getWind(current.wind_speed_10m);
+            const windDir = windDirs[Math.round(current.wind_direction_10m / 45) % 8];
             
-            const maxTemp = Math.round(daily.temperature_2m_max[tomorrow]);
-            const minTemp = Math.round(daily.temperature_2m_min[tomorrow]);
-            const weatherCode = daily.weather_code[tomorrow];
+            const wInfo = weatherCodes[code] || { icon: '☁️', desc: '多云' };
             
-            // 获取风速和风向
-            const windSpeed = current.wind_speed_10m;
-            const windDirection = current.wind_direction_10m;
-            const windInfo = getWindLevel(windSpeed);
-            const windDirText = windDirections[Math.round(windDirection / 45) % 8];
+            // 位置
+            document.getElementById('locationName').textContent = loc.name;
+            document.getElementById('locationDetail').textContent = loc.admin1 ? `中国 · ${loc.admin1}` : '中国';
             
-            // 是否风大
-            const isWindy = windSpeed >= 20;
+            // 日期
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const days = ['日','一','二','三','四','五','六'];
+            document.getElementById('currentDate').textContent = `${tomorrow.getMonth()+1}月${tomorrow.getDate()}日 星期${days[tomorrow.getDay()]}`;
             
-            // 天气信息
-            const weatherInfo = weatherCodes[weatherCode] || { icon: '☁️', desc: '多云' };
+            // 天气
+            document.getElementById('weatherIcon').textContent = wInfo.icon;
+            document.getElementById('tempRange').textContent = `${minT}° ~ ${maxT}°`;
+            document.getElementById('weatherDesc').textContent = wInfo.desc;
+            document.getElementById('windInfo').textContent = `${wind.icon} ${windDir}风 ${wind.level} · ${wind.desc}`;
             
-            // 更新位置信息
-            document.getElementById('locationName').textContent = location.name;
+            // 体感温度计算
+            let avgT = (maxT + minT) / 2;
+            const isHighAltitude = loc.elevation > 1500;
+            const isSouthernWet = ['广东','广西','福建','海南'].includes(loc.admin1);
             
-            // 智能显示位置详情（避免重复或错误数据）
-            let locationDetail = location.country || '中国';
-            if (location.admin1 && location.admin1 !== location.name && !location.admin1.includes('市辖') && !location.admin1.includes('重庆')) {
-                locationDetail += ' · ' + location.admin1;
-            }
-            document.getElementById('locationDetail').textContent = locationDetail;
+            if (isHighAltitude) avgT -= 3;
+            if (isSouthernWet && avgT < 15) avgT -= 2;
             
-            // 更新日期
-            const tomorrowDate = new Date();
-            tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
-            document.getElementById('currentDate').textContent = 
-                `${tomorrowDate.getMonth() + 1}月${tomorrowDate.getDate()}日 星期${weekdays[tomorrowDate.getDay()]}`;
+            let zone;
+            if (avgT < 0) zone = 'freezing';
+            else if (avgT < 10) zone = 'cold';
+            else if (avgT < 20) zone = 'cool';
+            else if (avgT < 28) zone = 'warm';
+            else zone = 'hot';
             
-            // 更新天气
-            document.getElementById('weatherIcon').textContent = weatherInfo.icon;
-            document.getElementById('tempRange').textContent = `${minTemp}° ~ ${maxTemp}°`;
-            document.getElementById('weatherDesc').textContent = weatherInfo.desc;
+            const outfit = outfitDB[zone];
             
-            // 更新风信息
-            document.getElementById('windInfo').textContent = `${windInfo.icon} ${windDirText}风 ${windInfo.level} · ${windInfo.desc}`;
-            
-            // 确定温度区间（考虑地理位置调整）
-            let tempZone;
-            let avgTemp = (maxTemp + minTemp) / 2;
-            
-            // 根据地理位置调整体感温度
-            const isHighAltitude = location.elevation > 1500; // 高原
-            const isSouthernWet = ['广东', '广西', '福建', '海南', '云南'].includes(location.admin1); // 南方湿热
-            const isNorthernDry = ['黑龙江', '吉林', '辽宁', '内蒙古', '河北', '山西', '陕西', '甘肃', '宁夏'].includes(location.admin1); // 北方干冷
-            const isCoastal = ['上海', '天津', '浙江', '山东', '江苏', '辽宁'].includes(location.admin1) || location.name.includes('青岛') || location.name.includes('大连') || location.name.includes('厦门'); // 沿海
-            
-            // 体感温度调整
-            let feelsLikeTemp = avgTemp;
-            if (isHighAltitude) {
-                feelsLikeTemp -= 3; // 高原风大，体感更冷
-            }
-            if (isSouthernWet && avgTemp < 15) {
-                feelsLikeTemp -= 2; // 南方湿冷，体感更冷
-            }
-            if (isNorthernDry && avgTemp > 20) {
-                feelsLikeTemp += 2; // 北方干燥，体感更暖
-            }
-            
-            // 根据体感温度确定区间
-            if (feelsLikeTemp < 0) tempZone = 'freezing';
-            else if (feelsLikeTemp < 10) tempZone = 'cold';
-            else if (feelsLikeTemp < 20) tempZone = 'cool';
-            else if (feelsLikeTemp < 28) tempZone = 'warm';
-            else tempZone = 'hot';
-            
-            const outfit = outfitDatabase[tempZone];
-            
-            // 更新标签
-            let tagsHtml = outfit.tags.map(tag => {
-                let className = 'tag';
-                if (tempZone === 'freezing' || tempZone === 'cold') className = 'tag cold';
-                else if (tempZone === 'hot') className = 'tag hot';
-                else if (weatherCode >= 50) className = 'tag rain';
-                else className = 'tag highlight';
-                return `<span class="${className}">${tag}</span>`;
+            // 标签
+            let tagsHtml = outfit.tags.map(t => {
+                let cls = zone === 'hot' ? 'hot' : (zone === 'cold' || zone === 'freezing') ? 'cold' : code >= 50 ? 'rain' : 'highlight';
+                return `<span class="tag ${cls}">${t}</span>`;
             }).join('');
             
-            // 添加特殊气候标签
-            if (isHighAltitude) {
-                tagsHtml += `<span class="tag" style="background: #fff3e0; color: #e65100;">☀️ 高海拔·防晒</span>`;
-            }
-            if (isCoastal && windSpeed > 15) {
-                tagsHtml += `<span class="tag" style="background: #e3f2fd; color: #1976d2;">🌊 沿海·防风</span>`;
-            }
-            if (isSouthernWet && avgTemp < 15) {
-                tagsHtml += `<span class="tag" style="background: #e8f5e9; color: #2e7d32;">💧 湿冷·保暖</span>`;
-            }
-            if (isWindy) {
-                tagsHtml += `<span class="tag" style="background: #f3e5f5; color: #7b1fa2;">💨 风大</span>`;
-            }
+            if (isHighAltitude) tagsHtml += `<span class="tag" style="background:#fff3e0;color:#e65100">☀️ 高海拔</span>`;
+            if (isSouthernWet && avgT < 15) tagsHtml += `<span class="tag" style="background:#e8f5e9;color:#2e7d32">💧 湿冷</span>`;
             
             document.getElementById('weatherTags').innerHTML = tagsHtml;
             
-            // 更新提示（包含地理位置信息）
-            let tipsText = outfit.tips;
-            if (isWindy) {
-                tipsText += ' ' + outfit.windTips;
-            }
-            if (isHighAltitude) {
-                tipsText += ' 高原地区紫外线强，注意防晒。';
-            }
-            if (isSouthernWet && avgTemp < 15) {
-                tipsText += ' 南方湿冷，建议穿防水外套。';
-            }
-            if (isCoastal && windSpeed > 15) {
-                tipsText += ' 沿海风大，注意防风保暖。';
-            }
-            document.getElementById('tipsContent').textContent = tipsText;
+            // 提示
+            let tips = outfit.tips;
+            if (isHighAltitude) tips += ' 高原紫外线强，注意防晒。';
+            if (isSouthernWet && avgT < 15) tips += ' 南方湿冷，建议穿防水外套。';
+            document.getElementById('tipsContent').textContent = tips;
             
-            // 风大时的额外穿搭建议
-            let commuteItems = [...outfit.commute.items];
-            let casualItems = [...outfit.casual.items];
-            let trendyItems = [...outfit.trendy.items];
+            // 图片
+            document.getElementById('commuteImage').innerHTML = `<img src="${outfitImgs[zone]}" alt="通勤">`;
+            document.getElementById('casualImage').innerHTML = `<img src="${outfitImgs[zone]}" alt="休闲">`;
+            document.getElementById('trendyImage').innerHTML = `<img src="${outfitImgs[zone]}" alt="时髦">`;
             
-            if (isWindy) {
-                // 为每种风格添加防风建议
-                if (tempZone === 'cool' || tempZone === 'warm') {
-                    commuteItems.unshift('🧥 带件防风外套备用');
-                    casualItems.unshift('🧥 建议穿连帽外套或带围巾');
-                    trendyItems.unshift('🧣 丝巾/围巾防风又时髦');
-                } else if (tempZone === 'cold' || tempZone === 'freezing') {
-                    commuteItems.push('🧣 围巾扎紧，防止冷风灌入');
-                    casualItems.push('🧢 帽子戴好，别被风吹跑');
-                    trendyItems.push('🧥 选择有帽子的外套更实用');
-                }
-            }
+            // 标题和列表
+            document.getElementById('commuteTitle').textContent = outfit.titles.commute;
+            document.getElementById('casualTitle').textContent = outfit.titles.casual;
+            document.getElementById('trendyTitle').textContent = outfit.titles.trendy;
             
-            // 根据地理位置添加特殊建议
-            if (isHighAltitude) {
-                commuteItems.push('🕶️ 戴墨镜防晒（高原紫外线强）');
-                casualItems.push('🧴 涂防晒霜，戴遮阳帽');
-                trendyItems.push('🕶️ 时尚墨镜是高原必备');
-            }
-            if (isSouthernWet && avgTemp < 15) {
-                commuteItems.push('☔ 备把折叠伞防雨');
-                casualItems.push('👟 穿防水鞋或雨靴');
-                trendyItems.push('🧥 防水风衣既实用又时髦');
-            }
-            if (isCoastal && windSpeed > 15) {
-                commuteItems.push('🧥 海边风大，外套别选太飘的');
-                casualItems.push('🧢 帽子要系紧或戴有绳子的');
-                trendyItems.push('🕶️ 防风镜或墨镜挡海风');
-            }
+            const itemsHtml = outfit.items.map(i => `<li>${i}</li>`).join('');
+            document.getElementById('commuteItems').innerHTML = itemsHtml;
+            document.getElementById('casualItems').innerHTML = itemsHtml;
+            document.getElementById('trendyItems').innerHTML = itemsHtml;
             
-            // 更新穿搭图片
-            const images = outfitImages[tempZone];
-            document.getElementById('commuteImage').innerHTML = `<img src="${images.commute}" alt="通勤穿搭" loading="lazy">`;
-            document.getElementById('casualImage').innerHTML = `<img src="${images.casual}" alt="休闲穿搭" loading="lazy">`;
-            document.getElementById('trendyImage').innerHTML = `<img src="${images.trendy}" alt="时髦穿搭" loading="lazy">`;
-            
-            // 更新穿搭方案
-            const cityName = location.name.replace('（示例）', '');
-            const commuteKeyword = `${cityName} 通勤穿搭 ${maxTemp}度`;
-            const casualKeyword = `${cityName} 休闲穿搭 日常`;
-            const trendyKeyword = `${cityName} 时尚穿搭 街拍`;
-            
-            document.getElementById('commuteTitle').textContent = outfit.commute.title;
-            document.getElementById('commuteItems').innerHTML = commuteItems.map(item => `<li>${item}</li>`).join('');
-            document.getElementById('commuteLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(commuteKeyword)}`;
-            
-            document.getElementById('casualTitle').textContent = outfit.casual.title;
-            document.getElementById('casualItems').innerHTML = casualItems.map(item => `<li>${item}</li>`).join('');
-            document.getElementById('casualLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(casualKeyword)}`;
-            
-            document.getElementById('trendyTitle').textContent = outfit.trendy.title;
-            document.getElementById('trendyItems').innerHTML = trendyItems.map(item => `<li>${item}</li>`).join('');
-            document.getElementById('trendyLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(trendyKeyword)}`;
-            
-            // 显示结果
-            document.getElementById('resultContainer').classList.remove('hidden');
+            // 保存搜索关键词
+            const cityName = loc.name.replace('（示例）', '');
+            searchKeywords.commute = `${cityName} 通勤穿搭 ${maxT}度`;
+            searchKeywords.casual = `${cityName} 休闲穿搭`;
+            searchKeywords.trendy = `${cityName} 时尚穿搭`;
         }
         
-        // 回车搜索
-        document.getElementById('cityInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchCity();
+        // ========== 小红书链接处理 ==========
+        function handleAction(type) {
+            const keyword = searchKeywords[type];
+            if (!keyword) return;
+            
+            // 电脑端：直接打开网页
+            if (!platform.isMobile) {
+                window.open(`https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(keyword)}`, '_blank');
+                return;
             }
+            
+            // 手机端：尝试打开App
+            const encodedKeyword = encodeURIComponent(keyword);
+            let scheme;
+            
+            if (platform.isIOS) {
+                scheme = `xhsdiscover://search/result?keyword=${encodedKeyword}`;
+            } else {
+                scheme = `xhsdiscovery://search/result?keyword=${encodedKeyword}`;
+            }
+            
+            // 记录打开时间
+            const startTime = Date.now();
+            
+            // 尝试打开App
+            window.location.href = scheme;
+            
+            // 2秒后检查是否成功打开
+            setTimeout(() => {
+                const endTime = Date.now();
+                // 如果时间差小于2秒，说明App没有打开（用户还在当前页面）
+                if (endTime - startTime < 2200) {
+                    // 显示提示
+                    showToast('正在打开小红书...');
+                    
+                    // 再等待一下，如果没跳转，提供备选方案
+                    setTimeout(() => {
+                        if (confirm('未检测到小红书App，是否使用网页版查看？')) {
+                            window.open(`https://www.xiaohongshu.com/search_result?keyword=${encodedKeyword}`, '_blank');
+                        }
+                    }, 500);
+                }
+            }, 2000);
+        }
+        
+        function copyLink(type) {
+            const keyword = searchKeywords[type];
+            if (!keyword) return;
+            
+            const url = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(keyword)}`;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('链接已复制到剪贴板！');
+                }).catch(() => {
+                    // 降级方案
+                    const input = document.createElement('input');
+                    input.value = url;
+                    document.body.appendChild(input);
+                    input.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(input);
+                    showToast('链接已复制！');
+                });
+            } else {
+                showToast(url);
+            }
+        }
+        
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+        
+        // ========== 初始化 ==========
+        window.addEventListener('load', () => {
+            updatePage(
+                { name: '北京', admin1: '北京', elevation: 50 },
+                { daily: { temperature_2m_max: [0,15], temperature_2m_min: [0,2], weather_code: [0,3] },
+                  current: { wind_speed_10m: 5, wind_direction_10m: 45 } }
+            );
         });
         
-        // 显示默认内容
-        function showDefaultContent() {
-            const defaultLocation = { name: '北京（示例）', country: '中国', admin1: '' };
-            const defaultWeather = {
-                daily: {
-                    temperature_2m_max: [0, 15],
-                    temperature_2m_min: [0, 2],
-                    weather_code: [0, 3]
-                },
-                current: { wind_speed_10m: 5, wind_direction_10m: 45 }
-            };
-            updatePage(defaultLocation, defaultWeather);
-        }
-        
-        // 处理小红书链接点击
-        function handleXHSLink(link) {
-            const href = link.getAttribute('href');
-            if (href === '#' || !href) {
-                return false;
-            }
-            
-            // 检测是否是微信内置浏览器
-            const isWechat = /MicroMessenger/i.test(navigator.userAgent);
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            if (isWechat || isMobile) {
-                // 显示提示
-                const hintId = link.id.replace('Link', 'Hint');
-                const hint = document.getElementById(hintId);
-                if (hint) {
-                    hint.style.display = 'block';
-                }
-                
-                // 复制链接到剪贴板
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(href).then(() => {
-                        alert('🔗 链接已复制！\n\n由于微信限制，请在手机浏览器中打开小红书。\n\n链接已复制到剪贴板，可直接粘贴访问。');
-                    }).catch(() => {
-                        alert('🔗 请在浏览器中打开\n\n由于微信限制，无法直接跳转小红书。\n请用 Safari/Chrome 打开本页面。');
-                    });
-                } else {
-                    alert('🔗 请在浏览器中打开\n\n由于微信限制，无法直接跳转小红书。\n请用 Safari/Chrome 打开本页面。');
-                }
-                return false;
-            }
-            
-            return true;
-        }
-        
-        // 页面加载时只显示默认内容，不自动搜索
-        window.addEventListener('load', function() {
-            showDefaultContent();
+        document.getElementById('cityInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') searchCity();
         });
     </script>
 </body>
