@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日穿搭指南 - 智能天气穿搭</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 24px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        /* 城市搜索 */
+        .search-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            border-color: #667eea;
+        }
+        
+        .search-btn {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* 热门城市 */
+        .hot-cities {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .hot-cities-label {
+            font-size: 13px;
+            color: #888;
+            margin-right: 4px;
+            padding: 6px 0;
+        }
+        
+        .city-tag {
+            padding: 6px 14px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .city-tag:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 日期徽章 */
+        .date-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+        
+        /* 天气卡片 */
+        .weather-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .location-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .location-detail {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+        
+        .weather-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .weather-icon {
+            font-size: 64px;
+        }
+        
+        .weather-info {
+            text-align: right;
+        }
+        
+        .temp-range {
+            font-size: 36px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .weather-desc {
+            font-size: 16px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .weather-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background: #f5f5f5;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        .tag.highlight {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tag.cold {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .tag.hot {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .tag.rain {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        /* 穿搭卡片 */
+        .outfit-section {
+            margin-bottom: 16px;
+        }
+        
+        .section-title {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .outfit-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .outfit-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f5f5f5, #e8e8e8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 48px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .outfit-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .outfit-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .outfit-image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-size: 48px;
+        }
+        
+        .outfit-content {
+            padding: 20px;
+        }
+        
+        .outfit-style {
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .outfit-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        
+        .outfit-items {
+            list-style: none;
+            margin-bottom: 16px;
+        }
+        
+        .outfit-items li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            color: #555;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .outfit-items li:last-child {
+            border-bottom: none;
+        }
+        
+        .xiaohongshu-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #ff2442;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        
+        .xiaohongshu-link:hover {
+            background: #e0203c;
+        }
+        
+        /* 提示卡片 */
+        .tips-card {
+            background: linear-gradient(135deg, #fff9e6, #fff3cd);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .tips-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 8px;
+        }
+        
+        .tips-content {
+            font-size: 13px;
+            color: #856404;
+            line-height: 1.6;
+        }
+        
+        /* 趋势板块 */
+        .trends-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .trends-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
+        }
+        
+        .trend-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin: 4px;
+        }
+        
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            margin-top: 32px;
+            padding-bottom: 20px;
+        }
+        
+        /* 隐藏元素 */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* 错误提示 */
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .temp-range {
+                font-size: 28px;
+            }
+            
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .search-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>👔 每日穿搭指南</h1>
+            <div class="subtitle">输入城市，获取智能穿搭建议</div>
+        </div>
+        
+        <!-- 城市搜索 -->
+        <div class="search-card">
+            <div class="search-box">
+                <input type="text" class="search-input" id="cityInput" placeholder="输入城市名称，如：北京、上海、广州..." value="北京">
+                <button class="search-btn" id="searchBtn" onclick="searchCity()">获取穿搭</button>
+            </div>
+            <div class="hot-cities">
+                <span class="hot-cities-label">热门城市：</span>
+                <button class="city-tag" onclick="setCity('北京')">北京</button>
+                <button class="city-tag" onclick="setCity('上海')">上海</button>
+                <button class="city-tag" onclick="setCity('广州')">广州</button>
+                <button class="city-tag" onclick="setCity('深圳')">深圳</button>
+                <button class="city-tag" onclick="setCity('成都')">成都</button>
+                <button class="city-tag" onclick="setCity('杭州')">杭州</button>
+                <button class="city-tag" onclick="setCity('武汉')">武汉</button>
+                <button class="city-tag" onclick="setCity('西安')">西安</button>
+            </div>
+            <div id="errorContainer"></div>
+        </div>
+        
+        <!-- 加载状态 -->
+        <div class="loading hidden" id="loadingState">
+            <div class="loading-spinner"></div>
+            <div>正在获取天气数据...</div>
+        </div>
+        
+        <!-- 结果区域 -->
+        <div id="resultContainer" class="hidden">
+            <!-- 天气卡片 -->
+            <div class="weather-card">
+                <div class="location-name" id="locationName">北京</div>
+                <div class="location-detail" id="locationDetail">中国 · 北京市</div>
+                <div class="date-badge" id="currentDate">3月16日 星期一</div>
+                
+                <div class="weather-main" style="margin-top: 16px;">
+                    <div class="weather-icon" id="weatherIcon">☁️</div>
+                    <div class="weather-info">
+                        <div class="temp-range" id="tempRange">2° ~ 15°</div>
+                        <div class="weather-desc" id="weatherDesc">多云转阴</div>
+                        <div style="font-size: 13px; color: #888; margin-top: 6px;" id="windInfo">🍃 东北风 2-3级 · 轻风</div>
+                    </div>
+                </div>
+                <div class="weather-tags" id="weatherTags">
+                    <span class="tag highlight">温差大</span>
+                    <span class="tag">需叠穿</span>
+                    <span class="tag">早晚凉</span>
+                    <span class="tag">中午暖</span>
+                </div>
+            </div>
+            
+            <!-- 穿搭提示 -->
+            <div class="tips-card">
+                <div class="tips-title">💡 穿搭小贴士</div>
+                <div class="tips-content" id="tipsContent">
+                    今日温差较大，建议采用洋葱式叠穿法。早晨出门穿外套，中午热了可以脱掉。
+                </div>
+            </div>
+            
+            <!-- 穿搭方案 -->
+            <div class="outfit-section">
+                <div class="section-title">💼 通勤干练风</div>
+                <div class="outfit-card">
+                    <div class="outfit-image" id="commuteImage">
+                        <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=400&fit=crop" alt="通勤穿搭" loading="lazy">
+                    </div>
+                    <div class="outfit-content">
+                        <div class="outfit-style">Commute Style</div>
+                        <div class="outfit-title" id="commuteTitle">知性优雅 办公室首选</div>
+                        <ul class="outfit-items" id="commuteItems">
+                            <li>🧥 摩卡慕斯色风衣 / 毛呢大衣</li>
+                            <li>👔 白色高领打底衫</li>
+                            <li>👖 深蓝直筒西裤</li>
+                            <li>👞 乐福鞋 / 切尔西靴</li>
+                            <li>💎 简约金属项链 + 皮质手提包</li>
+                        </ul>
+                        <a href="#" class="xiaohongshu-link" id="commuteLink" target="_blank">
+                            <span>📕</span>
+                            <span>小红书查看搭配图</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="outfit-section">
+                <div class="section-title">👟 休闲舒适风</div>
+                <div class="outfit-card">
+                    <div class="outfit-image" id="casualImage">
+                        <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&h=400&fit=crop" alt="休闲穿搭" loading="lazy">
+                    </div>
+                    <div class="outfit-content">
+                        <div class="outfit-style">Casual Style</div>
+                        <div class="outfit-title" id="casualTitle">轻松随性 日常出街</div>
+                        <ul class="outfit-items" id="casualItems">
+                            <li>🧥 浅色轻薄羽绒服</li>
+                            <li>👕 连帽卫衣 / 针织衫</li>
+                            <li>👖 阔腿裤 / 直筒牛仔裤</li>
+                            <li>👟 运动鞋 / 老爹鞋</li>
+                            <li>🧢 棒球帽 + 帆布袋</li>
+                        </ul>
+                        <a href="#" class="xiaohongshu-link" id="casualLink" target="_blank">
+                            <span>📕</span>
+                            <span>小红书查看搭配图</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="outfit-section">
+                <div class="section-title">✨ 时髦层次感</div>
+                <div class="outfit-card">
+                    <div class="outfit-image" id="trendyImage">
+                        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=400&fit=crop" alt="时髦穿搭" loading="lazy">
+                    </div>
+                    <div class="outfit-content">
+                        <div class="outfit-style">Trendy Style</div>
+                        <div class="outfit-title" id="trendyTitle">2025秀场同款 吸睛出片</div>
+                        <ul class="outfit-items" id="trendyItems">
+                            <li>🧥 廓形西装外套（Saint Laurent风）</li>
+                            <li>👔 透明感衬衫 + 内搭背心</li>
+                            <li>👖 高腰牛仔裤 / 格纹阔腿裤</li>
+                            <li>👢 短靴 / 厚底乐福鞋</li>
+                            <li>🕶️ 复古手链 + 宽边太阳镜</li>
+                        </ul>
+                        <a href="#" class="xiaohongshu-link" id="trendyLink" target="_blank">
+                            <span>📕</span>
+                            <span>小红书查看搭配图</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 流行趋势 -->
+            <div class="trends-card">
+                <div class="trends-title">🔥 本季流行元素</div>
+                <span class="trend-tag">摩卡慕斯色</span>
+                <span class="trend-tag">透明感衬衫</span>
+                <span class="trend-tag">廓形西装</span>
+                <span class="trend-tag">运动风外套</span>
+                <span class="trend-tag">格纹元素</span>
+            </div>
+        </div>
+        
+        <div class="footer">
+            智能穿搭指南 · 基于实时天气数据<br>
+            数据来源：Open-Meteo + 2025春夏秀场趋势
+        </div>
+    </div>
+    
+    <script>
+        // 天气代码映射
+        const weatherCodes = {
+            0: { icon: '☀️', desc: '晴朗' },
+            1: { icon: '🌤️', desc: '多云' },
+            2: { icon: '⛅', desc: '阴天' },
+            3: { icon: '☁️', desc: '阴天' },
+            45: { icon: '🌫️', desc: '雾' },
+            48: { icon: '🌫️', desc: '雾凇' },
+            51: { icon: '🌦️', desc: '毛毛雨' },
+            53: { icon: '🌦️', desc: '小雨' },
+            55: { icon: '🌧️', desc: '中雨' },
+            61: { icon: '🌧️', desc: '小雨' },
+            63: { icon: '🌧️', desc: '中雨' },
+            65: { icon: '🌧️', desc: '大雨' },
+            71: { icon: '🌨️', desc: '小雪' },
+            73: { icon: '🌨️', desc: '中雪' },
+            75: { icon: '❄️', desc: '大雪' },
+            95: { icon: '⛈️', desc: '雷雨' },
+        };
+        
+        // 风向映射
+        const windDirections = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
+        
+        // 获取风力等级描述
+        function getWindLevel(speed) {
+            if (speed < 5) return { level: '1级', desc: '微风', icon: '🍃' };
+            if (speed < 12) return { level: '2-3级', desc: '轻风', icon: '🌿' };
+            if (speed < 20) return { level: '4级', desc: '和风', icon: '🌾' };
+            if (speed < 29) return { level: '5级', desc: '清风', icon: '🍂' };
+            if (speed < 39) return { level: '6级', desc: '强风', icon: '🌬️' };
+            return { level: '7级+', desc: '大风', icon: '💨' };
+        }
+        
+        // 穿搭图片数据库（Unsplash）
+        const outfitImages = {
+            freezing: {
+                commute: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=400&fit=crop',
+                casual: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=400&fit=crop',
+                trendy: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=400&fit=crop'
+            },
+            cold: {
+                commute: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=400&fit=crop',
+                casual: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&h=400&fit=crop',
+                trendy: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop'
+            },
+            cool: {
+                commute: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=400&fit=crop',
+                casual: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=400&fit=crop',
+                trendy: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=400&fit=crop'
+            },
+            warm: {
+                commute: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&h=400&fit=crop',
+                casual: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=400&fit=crop',
+                trendy: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=400&fit=crop'
+            },
+            hot: {
+                commute: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&h=400&fit=crop',
+                casual: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=400&fit=crop',
+                trendy: 'https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?w=600&h=400&fit=crop'
+            }
+        };
+            // 极寒 (< 0°C)
+            freezing: {
+                tips: '天气寒冷，注意保暖！建议穿羽绒服、厚毛衣，戴上围巾手套。',
+                windTips: '风大时体感更冷，记得戴帽子和围巾挡风。',
+                tags: ['极寒', '羽绒服', '保暖'],
+                commute: {
+                    title: '严寒通勤 保暖为先',
+                    items: ['🧥 长款羽绒服 / 厚毛呢大衣', '👔 高领毛衣 + 保暖内衣', '👖 加绒西裤 / 羊毛裤', '👢 雪地靴 / 加绒短靴', '🧣 围巾 + 手套 + 毛线帽']
+                },
+                casual: {
+                    title: '冬日休闲 温暖包裹',
+                    items: ['🧥 加厚羽绒服 / 棉服', '👕 加绒卫衣 / 厚毛衣', '👖 加绒牛仔裤 / 运动裤', '👟 加绒运动鞋 / 雪地靴', '🧢 针织帽 + 围巾']
+                },
+                trendy: {
+                    title: '冬日时髦 保暖不臃肿',
+                    items: ['🧥 收腰羽绒服（显瘦款）', '👔 羊绒衫 + 衬衫叠穿', '👖 高腰阔腿裤 + 保暖裤', '👢 厚底马丁靴', '🕶️ 毛绒耳罩 + 墨镜']
+                }
+            },
+            // 寒冷 (0-10°C)
+            cold: {
+                tips: '天气较冷，建议叠穿。外套+毛衣组合，方便根据温度调整。',
+                windTips: '有风天气建议加条围巾或穿带帽外套，防止冷风灌入。',
+                tags: ['寒冷', '叠穿', '保暖'],
+                commute: {
+                    title: '知性优雅 保暖通勤',
+                    items: ['🧥 毛呢大衣 / 轻薄羽绒服', '👔 高领打底衫 / 针织衫', '👖 直筒西裤 / 烟管裤', '👞 乐福鞋 / 短靴', '💎 简约项链 + 皮质包']
+                },
+                casual: {
+                    title: '轻松保暖 日常出街',
+                    items: ['🧥 轻薄羽绒服 / 夹克', '👕 连帽卫衣 / 针织衫', '👖 牛仔裤 / 休闲裤', '👟 运动鞋 / 板鞋', '🧢 棒球帽 + 斜挎包']
+                },
+                trendy: {
+                    title: '层次叠穿 时髦保暖',
+                    items: ['🧥 廓形西装 + 大衣叠穿', '👔 衬衫 + 马甲 + 高领衫', '👖 格纹阔腿裤 / 工装裤', '👢 切尔西靴 / 老爹鞋', '🕶️ 金属配饰 + 贝雷帽']
+                }
+            },
+            // 凉爽 (10-20°C)
+            cool: {
+                tips: '温度适宜，正是叠穿好时节。外套方便穿脱，应对早晚温差。',
+                windTips: '风大建议穿防风外套，或带件薄风衣备用。',
+                tags: ['凉爽', '叠穿', '舒适'],
+                commute: {
+                    title: '知性优雅 办公室首选',
+                    items: ['🧥 风衣 / 薄毛呢外套', '👔 衬衫 / 薄针织衫', '👖 西裤 / 九分裤', '👞 乐福鞋 / 单鞋', '💎 简约耳环 + 手提包']
+                },
+                casual: {
+                    title: '轻松随性 舒适日常',
+                    items: ['🧥 牛仔外套 / 工装夹克', '👕 T恤 / 薄卫衣', '👖 牛仔裤 / 休闲裤', '👟 运动鞋 / 帆布鞋', '🧢 鸭舌帽 + 帆布包']
+                },
+                trendy: {
+                    title: '时髦叠穿 春日氛围',
+                    items: ['🧥 廓形西装 / 短款夹克', '👔 透明感衬衫 + 背心', '👖 高腰阔腿裤 / 半裙', '👢 短靴 / 玛丽珍鞋', '🕶️ 复古配饰 + 丝巾']
+                }
+            },
+            // 温暖 (20-28°C)
+            warm: {
+                tips: '天气温暖，单穿即可。注意防晒，可带件薄外套应对空调房。',
+                windTips: '有风天气很舒适，但建议带件薄外套防风。',
+                tags: ['温暖', '单穿', '防晒'],
+                commute: {
+                    title: '清爽干练 职场丽人',
+                    items: ['🧥 薄西装 / 针织开衫（备用）', '👔 衬衫 / 薄针织衫', '👖 西裤 / 及膝裙', '👞 单鞋 / 低跟鞋', '💎 精致项链 + 简约包']
+                },
+                casual: {
+                    title: '舒适休闲 轻松自在',
+                    items: ['👕 T恤 / Polo衫 / 薄卫衣', '👖 牛仔裤 / 短裤 / 休闲裤', '👟 运动鞋 / 帆布鞋 / 凉鞋', '🧢 渔夫帽 / 棒球帽', '🎒 双肩包 / 斜挎包']
+                },
+                trendy: {
+                    title: '春日轻盈 时髦出街',
+                    items: ['👔 短款上衣 / 露脐装', '👖 阔腿裤 / 短裙 / 连衣裙', '👟 老爹鞋 / 穆勒鞋 / 凉鞋', '🕶️ 墨镜 + 耳环 + 项链', '👜 腋下包 / 迷你包']
+                }
+            },
+            // 炎热 (> 28°C)
+            hot: {
+                tips: '天气炎热，注意防暑降温。选择透气轻薄的面料，多喝水。',
+                windTips: '有风会凉快很多，选择透气衣物享受自然风。',
+                tags: ['炎热', '透气', '防晒'],
+                commute: {
+                    title: '清凉干练 夏日职场',
+                    items: ['👔 短袖衬衫 / 雪纺衫', '👖 九分西裤 / 及膝裙', '👞 透气单鞋 / 低跟凉鞋', '💎 简约耳钉 + 链条包', '🧴 防晒衣（可选）']
+                },
+                casual: {
+                    title: '清凉夏日 舒适自在',
+                    items: ['👕 T恤 / 背心 / 短袖衬衫', '🩳 短裤 / 阔腿裤 / 连衣裙', '👟 凉鞋 / 帆布鞋 / 洞洞鞋', '🧢 遮阳帽 / 棒球帽', '🎒 帆布包 / 环保袋']
+                },
+                trendy: {
+                    title: '夏日时髦 清凉吸睛',
+                    items: ['👔 吊带 / 露肩上衣 / 短款T恤', '👖 高腰短裤 / A字裙 / 开叉裙', '👡 绑带凉鞋 / 厚底拖鞋', '🕶️ 大框墨镜 + 夸张耳环', '👜 草编包 / 透明包']
+                }
+            }
+        };
+        
+        // 设置城市
+        function setCity(city) {
+            document.getElementById('cityInput').value = city;
+            searchCity();
+        }
+        
+        // 搜索城市
+        async function searchCity() {
+            const city = document.getElementById('cityInput').value.trim();
+            if (!city) {
+                showError('请输入城市名称');
+                return;
+            }
+            
+            // 显示加载状态
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('resultContainer').classList.add('hidden');
+            document.getElementById('errorContainer').innerHTML = '';
+            document.getElementById('searchBtn').disabled = true;
+            
+            try {
+                // 1. 获取城市坐标
+                const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=zh&format=json`);
+                const geoData = await geoResponse.json();
+                
+                if (!geoData.results || geoData.results.length === 0) {
+                    throw new Error('未找到该城市，请检查城市名称');
+                }
+                
+                const location = geoData.results[0];
+                
+                // 2. 获取天气数据（包含风速）
+                const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&daily=temperature_2m_max,temperature_2m_min,weather_code&current=wind_speed_10m,wind_direction_10m&timezone=auto&forecast_days=2`);
+                const weatherData = await weatherResponse.json();
+                
+                // 3. 更新页面
+                updatePage(location, weatherData);
+                
+            } catch (error) {
+                showError(error.message || '获取天气数据失败，请稍后重试');
+            } finally {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('searchBtn').disabled = false;
+            }
+        }
+        
+        // 显示错误
+        function showError(message) {
+            document.getElementById('errorContainer').innerHTML = `<div class="error-message">${message}</div>`;
+        }
+        
+        // 更新页面
+        function updatePage(location, weatherData) {
+            const daily = weatherData.daily;
+            const current = weatherData.current;
+            const tomorrow = 1; // 明天的数据索引
+            
+            const maxTemp = Math.round(daily.temperature_2m_max[tomorrow]);
+            const minTemp = Math.round(daily.temperature_2m_min[tomorrow]);
+            const weatherCode = daily.weather_code[tomorrow];
+            
+            // 获取风速和风向
+            const windSpeed = current.wind_speed_10m;
+            const windDirection = current.wind_direction_10m;
+            const windInfo = getWindLevel(windSpeed);
+            const windDirText = windDirections[Math.round(windDirection / 45) % 8];
+            
+            // 是否风大
+            const isWindy = windSpeed >= 20;
+            
+            // 天气信息
+            const weatherInfo = weatherCodes[weatherCode] || { icon: '☁️', desc: '多云' };
+            
+            // 更新位置信息
+            document.getElementById('locationName').textContent = location.name;
+            
+            // 智能显示位置详情（避免重复或错误数据）
+            let locationDetail = location.country || '中国';
+            if (location.admin1 && location.admin1 !== location.name && !location.admin1.includes('市辖') && !location.admin1.includes('重庆')) {
+                locationDetail += ' · ' + location.admin1;
+            }
+            document.getElementById('locationDetail').textContent = locationDetail;
+            
+            // 更新日期
+            const tomorrowDate = new Date();
+            tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+            document.getElementById('currentDate').textContent = 
+                `${tomorrowDate.getMonth() + 1}月${tomorrowDate.getDate()}日 星期${weekdays[tomorrowDate.getDay()]}`;
+            
+            // 更新天气
+            document.getElementById('weatherIcon').textContent = weatherInfo.icon;
+            document.getElementById('tempRange').textContent = `${minTemp}° ~ ${maxTemp}°`;
+            document.getElementById('weatherDesc').textContent = weatherInfo.desc;
+            
+            // 更新风信息
+            document.getElementById('windInfo').textContent = `${windInfo.icon} ${windDirText}风 ${windInfo.level} · ${windInfo.desc}`;
+            
+            // 确定温度区间
+            let tempZone;
+            const avgTemp = (maxTemp + minTemp) / 2;
+            if (avgTemp < 0) tempZone = 'freezing';
+            else if (avgTemp < 10) tempZone = 'cold';
+            else if (avgTemp < 20) tempZone = 'cool';
+            else if (avgTemp < 28) tempZone = 'warm';
+            else tempZone = 'hot';
+            
+            const outfit = outfitDatabase[tempZone];
+            
+            // 更新标签
+            let tagsHtml = outfit.tags.map(tag => {
+                let className = 'tag';
+                if (tempZone === 'freezing' || tempZone === 'cold') className = 'tag cold';
+                else if (tempZone === 'hot') className = 'tag hot';
+                else if (weatherCode >= 50) className = 'tag rain';
+                else className = 'tag highlight';
+                return `<span class="${className}">${tag}</span>`;
+            }).join('');
+            
+            // 添加风大标签
+            if (isWindy) {
+                tagsHtml += `<span class="tag" style="background: #e3f2fd; color: #1976d2;">💨 风大</span>`;
+            }
+            
+            document.getElementById('weatherTags').innerHTML = tagsHtml;
+            
+            // 更新提示（包含风的信息）
+            let tipsText = outfit.tips;
+            if (isWindy) {
+                tipsText += ' ' + outfit.windTips;
+            }
+            document.getElementById('tipsContent').textContent = tipsText;
+            
+            // 风大时的额外穿搭建议
+            let commuteItems = [...outfit.commute.items];
+            let casualItems = [...outfit.casual.items];
+            let trendyItems = [...outfit.trendy.items];
+            
+            if (isWindy) {
+                // 为每种风格添加防风建议
+                if (tempZone === 'cool' || tempZone === 'warm') {
+                    commuteItems.unshift('🧥 带件防风外套备用');
+                    casualItems.unshift('🧥 建议穿连帽外套或带围巾');
+                    trendyItems.unshift('🧣 丝巾/围巾防风又时髦');
+                } else if (tempZone === 'cold' || tempZone === 'freezing') {
+                    commuteItems.push('🧣 围巾扎紧，防止冷风灌入');
+                    casualItems.push('🧢 帽子戴好，别被风吹跑');
+                    trendyItems.push('🧥 选择有帽子的外套更实用');
+                }
+            }
+            
+            // 更新穿搭图片
+            const images = outfitImages[tempZone];
+            document.getElementById('commuteImage').innerHTML = `<img src="${images.commute}" alt="通勤穿搭" loading="lazy">`;
+            document.getElementById('casualImage').innerHTML = `<img src="${images.casual}" alt="休闲穿搭" loading="lazy">`;
+            document.getElementById('trendyImage').innerHTML = `<img src="${images.trendy}" alt="时髦穿搭" loading="lazy">`;
+            
+            // 更新穿搭方案
+            document.getElementById('commuteTitle').textContent = outfit.commute.title;
+            document.getElementById('commuteItems').innerHTML = commuteItems.map(item => `<li>${item}</li>`).join('');
+            document.getElementById('commuteLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(location.name + ' ' + outfit.commute.title)}`;
+            
+            document.getElementById('casualTitle').textContent = outfit.casual.title;
+            document.getElementById('casualItems').innerHTML = casualItems.map(item => `<li>${item}</li>`).join('');
+            document.getElementById('casualLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(location.name + ' ' + outfit.casual.title)}`;
+            
+            document.getElementById('trendyTitle').textContent = outfit.trendy.title;
+            document.getElementById('trendyItems').innerHTML = trendyItems.map(item => `<li>${item}</li>`).join('');
+            document.getElementById('trendyLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(location.name + ' ' + outfit.trendy.title)}`;
+            
+            // 显示结果
+            document.getElementById('resultContainer').classList.remove('hidden');
+        }
+        
+        // 回车搜索
+        document.getElementById('cityInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchCity();
+            }
+        });
+        
+        // 页面加载时自动搜索默认城市
+        window.addEventListener('load', function() {
+            searchCity();
+        });
+    </script>
+</body>
+</html>
