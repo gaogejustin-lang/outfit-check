@@ -466,37 +466,37 @@
             return { level: '7级+', desc: '大风', icon: '💨' };
         }
         
-        // ========== 穿搭图片（2026年风格 × 温度匹配） ==========
+        // ========== 穿搭图片（温度优先 + 风格匹配） ==========
         const outfitImgs = {
             freezing: {
-                // 零下极寒：厚重大衣、羽绒服、围巾手套
-                commute: 'https://images.unsplash.com/photo-1548624149-f3e550244c09?w=600&h=400&fit=crop', // 驼色长大衣通勤
-                casual: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop',   // 厚实羽绒服休闲
-                trendy: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=400&fit=crop'   // 皮草围巾时髦街拍
+                // 极寒(-∞~0°C): 厚重冬装
+                commute: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&h=400&fit=crop', // 冬大衣通勤
+                casual: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop',   // 羽绒服街头
+                trendy: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=400&fit=crop'   // 皮草/毛绒时尚
             },
             cold: {
-                // 寒冷：毛呢大衣、高领毛衣、叠穿
-                commute: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=400&fit=crop',  // 黑色毛呢大衣知性
-                casual: 'https://images.unsplash.com/photo-1520975661595-6453be3f7070?w=600&h=400&fit=crop',   // 牛仔外套+高领毛衣
-                trendy: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=400&fit=crop'   // 层次叠穿时髦
+                // 寒冷(0~10°C): 秋冬过渡
+                commute: 'https://images.unsplash.com/photo-1548624149-f3e550244c09?w=600&h=400&fit=crop', // 毛呢外套
+                casual: 'https://images.unsplash.com/photo-1520975661595-6453be3f7070?w=600&h=400&fit=crop',   // 牛仔夹克+毛衣
+                trendy: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=400&fit=crop'   // 层次叠穿
             },
             cool: {
-                // 凉爽：风衣、薄外套、衬衫
-                commute: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?w=600&h=400&fit=crop',  // 卡其风衣干练
-                casual: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=400&fit=crop',   // 牛仔夹克休闲
-                trendy: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=600&h=400&fit=crop'   // 西装外套叠穿时髦
+                // 凉爽(10~20°C): 春秋装
+                commute: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?w=600&h=400&fit=crop', // 风衣
+                casual: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=400&fit=crop',   // 休闲夹克
+                trendy: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=600&h=400&fit=crop'   // 西装叠穿
             },
             warm: {
-                // 温暖：薄衬衫、单穿、轻盈
-                commute: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=400&fit=crop',  // 衬衫西裤职场
-                casual: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&h=400&fit=crop',   // T恤牛仔裤轻松
-                trendy: 'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=600&h=400&fit=crop'   // 法式上衣半裙春日
+                // 温暖(20~28°C): 春夏装
+                commute: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=400&fit=crop', // 衬衫
+                casual: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&h=400&fit=crop',   // T恤休闲
+                trendy: 'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=600&h=400&fit=crop'   // 轻盈春日
             },
             hot: {
-                // 炎热：短袖、吊带、清凉
-                commute: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=400&fit=crop',  // 短袖衬衫职场清凉
-                casual: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=400&fit=crop',   // 背心短裤夏日
-                trendy: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=400&fit=crop'   // 吊带裙露肩清凉时髦
+                // 炎热(28°C+): 夏装
+                commute: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=400&fit=crop', // 短袖职场
+                casual: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=400&fit=crop',   // 背心短裤
+                trendy: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=400&fit=crop'   // 吊带裙
             }
         };
         
@@ -822,7 +822,108 @@
             '乐东': { lat: 18.7483, lon: 109.1675, admin1: '海南' },
             '陵水': { lat: 18.5060, lon: 110.0372, admin1: '海南' },
             '保亭': { lat: 18.6391, lon: 109.7025, admin1: '海南' },
-            '琼中': { lat: 19.0333, lon: 109.8333, admin1: '海南' }
+            '琼中': { lat: 19.0333, lon: 109.8333, admin1: '海南' },
+            // ========== 国际主要城市 ==========
+            // 美国
+            '纽约': { lat: 40.7128, lon: -74.0060, admin1: '纽约州', country: '美国' },
+            '洛杉矶': { lat: 34.0522, lon: -118.2437, admin1: '加利福尼亚州', country: '美国' },
+            '芝加哥': { lat: 41.8781, lon: -87.6298, admin1: '伊利诺伊州', country: '美国' },
+            '旧金山': { lat: 37.7749, lon: -122.4194, admin1: '加利福尼亚州', country: '美国' },
+            '西雅图': { lat: 47.6062, lon: -122.3321, admin1: '华盛顿州', country: '美国' },
+            '波士顿': { lat: 42.3601, lon: -71.0589, admin1: '马萨诸塞州', country: '美国' },
+            '华盛顿': { lat: 38.9072, lon: -77.0369, admin1: '哥伦比亚特区', country: '美国' },
+            '迈阿密': { lat: 25.7617, lon: -80.1918, admin1: '佛罗里达州', country: '美国' },
+            '拉斯维加斯': { lat: 36.1699, lon: -115.1398, admin1: '内华达州', country: '美国' },
+            '休斯顿': { lat: 29.7604, lon: -95.3698, admin1: '德克萨斯州', country: '美国' },
+            // 英国
+            '伦敦': { lat: 51.5074, lon: -0.1278, admin1: '英格兰', country: '英国' },
+            '曼彻斯特': { lat: 53.4808, lon: -2.2426, admin1: '英格兰', country: '英国' },
+            '爱丁堡': { lat: 55.9533, lon: -3.1883, admin1: '苏格兰', country: '英国' },
+            // 日本
+            '东京': { lat: 35.6762, lon: 139.6503, admin1: '东京都', country: '日本' },
+            '大阪': { lat: 34.6937, lon: 135.5023, admin1: '大阪府', country: '日本' },
+            '京都': { lat: 35.0116, lon: 135.7681, admin1: '京都府', country: '日本' },
+            '横滨': { lat: 35.4437, lon: 139.6380, admin1: '神奈川县', country: '日本' },
+            '名古屋': { lat: 35.1815, lon: 136.9066, admin1: '爱知县', country: '日本' },
+            '札幌': { lat: 43.0618, lon: 141.3545, admin1: '北海道', country: '日本' },
+            '福冈': { lat: 33.5902, lon: 130.4017, admin1: '福冈县', country: '日本' },
+            // 韩国
+            '首尔': { lat: 37.5665, lon: 126.9780, admin1: '首尔特别市', country: '韩国' },
+            '釜山': { lat: 35.1796, lon: 129.0756, admin1: '釜山广域市', country: '韩国' },
+            '济州': { lat: 33.4996, lon: 126.5312, admin1: '济州特别自治道', country: '韩国' },
+            // 新加坡
+            '新加坡': { lat: 1.3521, lon: 103.8198, admin1: '新加坡', country: '新加坡' },
+            // 泰国
+            '曼谷': { lat: 13.7563, lon: 100.5018, admin1: '曼谷', country: '泰国' },
+            '清迈': { lat: 18.7883, lon: 98.9853, admin1: '清迈府', country: '泰国' },
+            '普吉': { lat: 7.8804, lon: 98.3923, admin1: '普吉府', country: '泰国' },
+            // 马来西亚
+            '吉隆坡': { lat: 3.1390, lon: 101.6869, admin1: '吉隆坡', country: '马来西亚' },
+            // 印度尼西亚
+            '雅加达': { lat: -6.2088, lon: 106.8456, admin1: '雅加达', country: '印度尼西亚' },
+            '巴厘岛': { lat: -8.4095, lon: 115.1889, admin1: '巴厘岛', country: '印度尼西亚' },
+            // 菲律宾
+            '马尼拉': { lat: 14.5995, lon: 120.9842, admin1: '马尼拉', country: '菲律宾' },
+            // 越南
+            '河内': { lat: 21.0278, lon: 105.8342, admin1: '河内', country: '越南' },
+            '胡志明': { lat: 10.8231, lon: 106.6297, admin1: '胡志明市', country: '越南' },
+            // 澳大利亚
+            '悉尼': { lat: -33.8688, lon: 151.2093, admin1: '新南威尔士州', country: '澳大利亚' },
+            '墨尔本': { lat: -37.8136, lon: 144.9631, admin1: '维多利亚州', country: '澳大利亚' },
+            '布里斯班': { lat: -27.4698, lon: 153.0251, admin1: '昆士兰州', country: '澳大利亚' },
+            '珀斯': { lat: -31.9505, lon: 115.8605, admin1: '西澳大利亚州', country: '澳大利亚' },
+            // 加拿大
+            '多伦多': { lat: 43.6532, lon: -79.3832, admin1: '安大略省', country: '加拿大' },
+            '温哥华': { lat: 49.2827, lon: -123.1207, admin1: '不列颠哥伦比亚省', country: '加拿大' },
+            '蒙特利尔': { lat: 45.5017, lon: -73.5673, admin1: '魁北克省', country: '加拿大' },
+            '卡尔加里': { lat: 51.0447, lon: -114.0719, admin1: '艾伯塔省', country: '加拿大' },
+            // 法国
+            '巴黎': { lat: 48.8566, lon: 2.3522, admin1: '法兰西岛', country: '法国' },
+            '尼斯': { lat: 43.7102, lon: 7.2620, admin1: '普罗旺斯', country: '法国' },
+            '里昂': { lat: 45.7640, lon: 4.8357, admin1: '奥弗涅-罗讷-阿尔卑斯', country: '法国' },
+            // 德国
+            '柏林': { lat: 52.5200, lon: 13.4050, admin1: '柏林', country: '德国' },
+            '慕尼黑': { lat: 48.1351, lon: 11.5820, admin1: '巴伐利亚', country: '德国' },
+            '法兰克福': { lat: 50.1109, lon: 8.6821, admin1: '黑森', country: '德国' },
+            // 意大利
+            '罗马': { lat: 41.9028, lon: 12.4964, admin1: '拉齐奥', country: '意大利' },
+            '米兰': { lat: 45.4642, lon: 9.1900, admin1: '伦巴第', country: '意大利' },
+            '威尼斯': { lat: 45.4408, lon: 12.3155, admin1: '威尼托', country: '意大利' },
+            '佛罗伦萨': { lat: 43.7696, lon: 11.2558, admin1: '托斯卡纳', country: '意大利' },
+            // 西班牙
+            '马德里': { lat: 40.4168, lon: -3.7038, admin1: '马德里', country: '西班牙' },
+            '巴塞罗那': { lat: 41.3851, lon: 2.1734, admin1: '加泰罗尼亚', country: '西班牙' },
+            // 荷兰
+            '阿姆斯特丹': { lat: 52.3676, lon: 4.9041, admin1: '北荷兰省', country: '荷兰' },
+            // 瑞士
+            '苏黎世': { lat: 47.3769, lon: 8.5417, admin1: '苏黎世州', country: '瑞士' },
+            '日内瓦': { lat: 46.2044, lon: 6.1432, admin1: '日内瓦州', country: '瑞士' },
+            // 俄罗斯
+            '莫斯科': { lat: 55.7558, lon: 37.6173, admin1: '莫斯科', country: '俄罗斯' },
+            '圣彼得堡': { lat: 59.9311, lon: 30.3609, admin1: '圣彼得堡', country: '俄罗斯' },
+            // 阿联酋
+            '迪拜': { lat: 25.2048, lon: 55.2708, admin1: '迪拜', country: '阿联酋' },
+            '阿布扎比': { lat: 24.4539, lon: 54.3773, admin1: '阿布扎比', country: '阿联酋' },
+            // 土耳其
+            '伊斯坦布尔': { lat: 41.0082, lon: 28.9784, admin1: '伊斯坦布尔', country: '土耳其' },
+            // 埃及
+            '开罗': { lat: 30.0444, lon: 31.2357, admin1: '开罗', country: '埃及' },
+            // 南非
+            '开普敦': { lat: -33.9249, lon: 18.4241, admin1: '西开普省', country: '南非' },
+            '约翰内斯堡': { lat: -26.2041, lon: 28.0473, admin1: '豪登省', country: '南非' },
+            // 新西兰
+            '奥克兰': { lat: -36.8485, lon: 174.7633, admin1: '奥克兰大区', country: '新西兰' },
+            '惠灵顿': { lat: -41.2865, lon: 174.7762, admin1: '惠灵顿大区', country: '新西兰' },
+            // 印度
+            '新德里': { lat: 28.6139, lon: 77.2090, admin1: '德里', country: '印度' },
+            '孟买': { lat: 19.0760, lon: 72.8777, admin1: '马哈拉施特拉邦', country: '印度' },
+            // 巴西
+            '圣保罗': { lat: -23.5505, lon: -46.6333, admin1: '圣保罗州', country: '巴西' },
+            '里约': { lat: -22.9068, lon: -43.1729, admin1: '里约热内卢州', country: '巴西' },
+            // 墨西哥
+            '墨西哥城': { lat: 19.4326, lon: -99.1332, admin1: '墨西哥城', country: '墨西哥' },
+            // 阿根廷
+            '布宜诺斯艾利斯': { lat: -34.6037, lon: -58.3816, admin1: '布宜诺斯艾利斯', country: '阿根廷' }
         };
         
         // ========== 平台检测 ==========
@@ -869,12 +970,13 @@
                 // 1. 先检查是否是主要城市（精确匹配）
                 const cityKey = cityInput.replace(/市$/, '');
                 if (majorCities[cityKey]) {
+                    const cityData = majorCities[cityKey];
                     location = {
                         name: cityKey,
-                        latitude: majorCities[cityKey].lat,
-                        longitude: majorCities[cityKey].lon,
-                        admin1: majorCities[cityKey].admin1,
-                        country: '中国',
+                        latitude: cityData.lat,
+                        longitude: cityData.lon,
+                        admin1: cityData.admin1,
+                        country: cityData.country || '中国',
                         elevation: 50
                     };
                 } else {
@@ -885,19 +987,33 @@
                     
                     if (!geoData.results?.length) throw new Error('未找到该城市，请检查城市名称');
                     
-                    // 严格筛选：只选中国大陆的结果，排除国外
-                    const chinaResults = geoData.results.filter(r => 
-                        r.country_code === 'CN' && 
-                        r.country === '中国' &&
-                        !['美国', '加拿大', '澳大利亚', '英国', '日本', '韩国'].includes(r.country)
+                    // 严格筛选：优先中国大陆，也支持国际城市
+                    let chinaResults = geoData.results.filter(r => 
+                        r.country_code === 'CN' && r.country === '中国'
                     );
                     
-                    if (!chinaResults.length) throw new Error('未找到该城市（仅支持中国境内城市）');
+                    // 如果没有找到中国城市，搜索国际城市
+                    if (!chinaResults.length) {
+                        chinaResults = geoData.results.filter(r => 
+                            ['US','GB','JP','KR','SG','TH','MY','ID','PH','VN','AU','CA','FR','DE','IT','ES','NL','CH','RU','AE','TR','EG','ZA','NZ','IN','BR','MX','AR'].includes(r.country_code)
+                        );
+                    }
+                    
+                    if (!chinaResults.length) throw new Error('未找到该城市，请尝试其他城市名称');
                     
                     // 优先选择省辖市级别的（通常人口更多）
-                    location = chinaResults.find(r => r.feature_code === 'PPLA') || 
+                    const selected = chinaResults.find(r => r.feature_code === 'PPLA') || 
                                chinaResults.find(r => r.population && r.population > 100000) ||
                                chinaResults[0];
+                    
+                    location = {
+                        name: selected.name,
+                        latitude: selected.latitude,
+                        longitude: selected.longitude,
+                        admin1: selected.admin1,
+                        country: selected.country || '中国',
+                        elevation: selected.elevation || 50
+                    };
                 }
                 
                 // 3. 获取天气数据
@@ -933,7 +1049,8 @@
             
             // 位置信息
             document.getElementById('locationName').textContent = loc.name;
-            document.getElementById('locationDetail').textContent = loc.admin1 ? `中国 · ${loc.admin1}` : '中国';
+            const countryName = loc.country || '中国';
+            document.getElementById('locationDetail').textContent = loc.admin1 ? `${countryName} · ${loc.admin1}` : countryName;
             
             // 日期
             const tomorrow = new Date();
