@@ -595,7 +595,7 @@
         
         <div class="footer">
             智能穿搭指南 · 基于实时天气数据<br>
-            数据来源：Open-Meteo + 2025春夏秀场趋势
+            数据来源：Open-Meteo 天气预报
         </div>
     </div>
     
@@ -769,7 +769,6 @@
             
             // 显示加载状态
             document.getElementById('loadingState').classList.remove('hidden');
-            document.getElementById('resultContainer').classList.add('hidden');
             document.getElementById('errorContainer').innerHTML = '';
             document.getElementById('searchBtn').disabled = true;
             
@@ -911,17 +910,22 @@
             document.getElementById('trendyImage').innerHTML = `<img src="${images.trendy}" alt="时髦穿搭" loading="lazy">`;
             
             // 更新穿搭方案
+            const cityName = location.name.replace('（示例）', '');
+            const commuteKeyword = `${cityName} 通勤穿搭 ${maxTemp}度`;
+            const casualKeyword = `${cityName} 休闲穿搭 日常`;
+            const trendyKeyword = `${cityName} 时尚穿搭 街拍`;
+            
             document.getElementById('commuteTitle').textContent = outfit.commute.title;
             document.getElementById('commuteItems').innerHTML = commuteItems.map(item => `<li>${item}</li>`).join('');
-            document.getElementById('commuteLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(location.name + ' ' + outfit.commute.title)}`;
+            document.getElementById('commuteLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(commuteKeyword)}`;
             
             document.getElementById('casualTitle').textContent = outfit.casual.title;
             document.getElementById('casualItems').innerHTML = casualItems.map(item => `<li>${item}</li>`).join('');
-            document.getElementById('casualLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(location.name + ' ' + outfit.casual.title)}`;
+            document.getElementById('casualLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(casualKeyword)}`;
             
             document.getElementById('trendyTitle').textContent = outfit.trendy.title;
             document.getElementById('trendyItems').innerHTML = trendyItems.map(item => `<li>${item}</li>`).join('');
-            document.getElementById('trendyLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(location.name + ' ' + outfit.trendy.title)}`;
+            document.getElementById('trendyLink').href = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(trendyKeyword)}`;
             
             // 显示结果
             document.getElementById('resultContainer').classList.remove('hidden');
@@ -944,7 +948,7 @@
         
         // 显示默认内容
         function showDefaultContent() {
-            const defaultLocation = { name: '北京', country: '中国', admin1: '' };
+            const defaultLocation = { name: '北京（示例）', country: '中国', admin1: '' };
             const defaultWeather = {
                 daily: {
                     temperature_2m_max: [0, 15],
