@@ -16,12 +16,10 @@
         
         .container { max-width: 480px; margin: 0 auto; }
         
-        /* Header */
         .header { text-align: center; color: white; margin-bottom: 16px; }
         .header h1 { font-size: 24px; font-weight: 600; }
         .header .subtitle { opacity: 0.9; font-size: 13px; margin-top: 4px; }
         
-        /* Search */
         .search-card {
             background: white;
             border-radius: 16px;
@@ -77,7 +75,6 @@
             cursor: pointer;
         }
         
-        /* Loading */
         .loading {
             text-align: center;
             padding: 30px;
@@ -97,7 +94,6 @@
         
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        /* Weather Card */
         .weather-card {
             background: white;
             border-radius: 16px;
@@ -150,7 +146,6 @@
         .tag.hot { background: #ffebee; color: #c62828; }
         .tag.rain { background: #e8f5e9; color: #2e7d32; }
         
-        /* Tips */
         .tips-card {
             background: linear-gradient(135deg, #fff9e6, #fff3cd);
             border-radius: 12px;
@@ -162,7 +157,6 @@
         .tips-title { font-size: 13px; font-weight: 600; color: #856404; }
         .tips-content { font-size: 12px; color: #856404; margin-top: 4px; line-height: 1.5; }
         
-        /* Outfit Section */
         .outfit-section { margin-bottom: 12px; }
         
         .section-title {
@@ -218,7 +212,6 @@
         
         .outfit-items li:last-child { border-bottom: none; }
         
-        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -256,7 +249,6 @@
         .btn-primary:active { background: #e0203c; }
         .btn-secondary:active { background: #e0e0e0; }
         
-        /* Footer */
         .footer {
             text-align: center;
             color: rgba(255,255,255,0.7);
@@ -276,7 +268,6 @@
             font-size: 13px;
         }
         
-        /* Desktop enhancements */
         @media (min-width: 768px) {
             body { padding: 24px; }
             .container { max-width: 680px; }
@@ -304,7 +295,6 @@
             .outfit-items { font-size: 14px; }
         }
         
-        /* Toast notification */
         .toast {
             position: fixed;
             bottom: 80px;
@@ -354,7 +344,6 @@
         </div>
         
         <div id="resultContainer">
-            <!-- Weather -->
             <div class="weather-card">
                 <div class="location-name" id="locationName">北京</div>
                 <div class="location-detail" id="locationDetail">中国</div>
@@ -371,13 +360,12 @@
                 <div class="weather-tags" id="weatherTags"></div>
             </div>
             
-            <!-- Tips -->
             <div class="tips-card">
                 <div class="tips-title">💡 穿搭小贴士</div>
                 <div class="tips-content" id="tipsContent">--</div>
             </div>
             
-            <!-- Outfit: Commute -->
+            <!-- Commute -->
             <div class="outfit-section">
                 <div class="section-title">💼 通勤干练风</div>
                 <div class="outfit-card">
@@ -397,7 +385,7 @@
                 </div>
             </div>
             
-            <!-- Outfit: Casual -->
+            <!-- Casual -->
             <div class="outfit-section">
                 <div class="section-title">👟 休闲舒适风</div>
                 <div class="outfit-card">
@@ -417,7 +405,7 @@
                 </div>
             </div>
             
-            <!-- Outfit: Trendy -->
+            <!-- Trendy -->
             <div class="outfit-section">
                 <div class="section-title">✨ 时髦层次感</div>
                 <div class="outfit-card">
@@ -447,7 +435,7 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // ========== 配置数据 ==========
+        // ========== 天气数据 ==========
         const weatherCodes = {
             0: { icon: '☀️', desc: '晴朗' },
             1: { icon: '🌤️', desc: '多云' },
@@ -478,6 +466,7 @@
             return { level: '7级+', desc: '大风', icon: '💨' };
         }
         
+        // ========== 穿搭图片 ==========
         const outfitImgs = {
             freezing: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=400&fit=crop',
             cold: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=400&fit=crop',
@@ -486,67 +475,329 @@
             hot: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=400&fit=crop'
         };
         
+        // ========== 完整的穿搭数据库（三种风格完全不同） ==========
         const outfitDB = {
             freezing: {
-                tips: '极寒天气！羽绒服、厚毛衣、围巾手套必备。注意防风保暖。',
+                tips: '极寒天气！必须做好全方位保暖。羽绒服、厚毛衣、围巾手套帽子缺一不可。',
                 tags: ['极寒', '羽绒服', '保暖'],
-                titles: { commute: '严寒通勤 保暖为先', casual: '冬日休闲 温暖包裹', trendy: '冬日时髦 保暖不臃肿' },
-                items: [
-                    '🧥 长款羽绒服 / 厚毛呢大衣',
-                    '👔 高领毛衣 + 保暖内衣',
-                    '👖 加绒西裤 / 羊毛裤',
-                    '👢 雪地靴 / 加绒短靴',
-                    '🧣 围巾 + 手套 + 毛线帽'
-                ]
+                commute: {
+                    title: '严寒通勤 专业保暖',
+                    items: ['🧥 长款过膝羽绒服（充绒量300g+）', '👔 羊绒衫 + 保暖内衣套装', '👖 加绒西裤或羊毛裤', '👢 皮毛一体短靴', '🧣 羊毛围巾 + 皮手套 + 针织帽']
+                },
+                casual: {
+                    title: '冬日休闲 温暖包裹',
+                    items: ['🧥 加厚工装羽绒服', '👕 加绒连帽卫衣', '👖 加绒牛仔裤', '👟 高帮雪地靴', '🧢 毛线帽 + 棉口罩']
+                },
+                trendy: {
+                    title: '冬日时髦 显瘦不臃肿',
+                    items: ['🧥 收腰款羽绒服（腰带设计）', '👔 高领羊绒打底 + 针织马甲', '👖 鲨鱼裤/加绒打底裤 + 长靴', '👢 过膝长靴', '🕶️ 贝雷帽 + 墨镜 + 毛绒包']
+                }
             },
             cold: {
-                tips: '天气较冷，建议叠穿。外套+毛衣组合，方便根据温度调整。',
+                tips: '天气寒冷，建议洋葱式叠穿。方便根据室内外温差随时增减衣物。',
                 tags: ['寒冷', '叠穿', '保暖'],
-                titles: { commute: '知性优雅 保暖通勤', casual: '轻松保暖 日常出街', trendy: '层次叠穿 时髦保暖' },
-                items: [
-                    '🧥 毛呢大衣 / 轻薄羽绒服',
-                    '👔 高领打底衫 / 针织衫',
-                    '👖 直筒西裤 / 烟管裤',
-                    '👞 乐福鞋 / 短靴',
-                    '💎 简约项链 + 皮质包'
-                ]
+                commute: {
+                    title: '知性优雅 职场保暖',
+                    items: ['🧥 中长款毛呢大衣（深色系）', '👔 高领羊毛打底衫', '👖 烟管裤/直筒西裤', '👞 切尔西靴/乐福鞋', '💎 珍珠耳钉 + 皮质托特包']
+                },
+                casual: {
+                    title: '轻松保暖 日常舒适',
+                    items: ['🧥 轻薄羽绒服/棉服', '👕 半高领毛衣/卫衣', '👖 直筒牛仔裤', '👟 运动鞋/马丁靴', '🧢 棒球帽 + 帆布包']
+                },
+                trendy: {
+                    title: '层次叠穿 时髦保暖',
+                    items: ['🧥 廓形西装外套 + 长款大衣叠穿', '👔 衬衫 + 针织背心 + 高领打底', '👖 格纹阔腿裤', '👢 厚底马丁靴', '🕶️ 金属链条项链 + 渔夫帽']
+                }
             },
             cool: {
-                tips: '温度适宜，正是叠穿好时节。外套方便穿脱，应对早晚温差。',
+                tips: '温度适宜，正是穿搭好时节。外套方便穿脱，轻松应对早晚温差。',
                 tags: ['凉爽', '叠穿', '舒适'],
-                titles: { commute: '知性优雅 办公室首选', casual: '轻松随性 舒适日常', trendy: '时髦叠穿 春日氛围' },
-                items: [
-                    '🧥 风衣 / 薄毛呢外套',
-                    '👔 衬衫 / 薄针织衫',
-                    '👖 西裤 / 九分裤',
-                    '👞 乐福鞋 / 单鞋',
-                    '💎 简约耳环 + 手提包'
-                ]
+                commute: {
+                    title: '干练知性 职场首选',
+                    items: ['🧥 经典卡其色风衣', '👔 真丝衬衫/薄针织衫', '👖 九分西裤/铅笔裙', '👞 尖头平底鞋/低跟鞋', '💎 简约耳钉 + 皮质手提包']
+                },
+                casual: {
+                    title: '随性舒适 周末休闲',
+                    items: ['🧥 牛仔外套/工装夹克', '👕 纯棉T恤/薄卫衣', '👖 直筒牛仔裤', '👟 帆布鞋/老爹鞋', '🎒 双肩包/斜挎包']
+                },
+                trendy: {
+                    title: '春日氛围 时髦叠穿',
+                    items: ['🧥 短款西装外套', '👔 碎花连衣裙/吊带+开衫', '👖 微喇牛仔裤', '👢 踝靴/玛丽珍鞋', '🕶️ 丝巾 + 复古墨镜 + 草编包']
+                }
             },
             warm: {
                 tips: '天气温暖，单穿即可。注意防晒，可带件薄外套应对空调房。',
                 tags: ['温暖', '单穿', '防晒'],
-                titles: { commute: '清爽干练 职场丽人', casual: '舒适休闲 轻松自在', trendy: '春日轻盈 时髦出街' },
-                items: [
-                    '🧥 薄西装 / 针织开衫（备用）',
-                    '👔 衬衫 / 薄针织衫',
-                    '👖 西裤 / 及膝裙',
-                    '👞 单鞋 / 低跟鞋',
-                    '💎 精致项链 + 简约包'
-                ]
+                commute: {
+                    title: '清爽干练 夏日职场',
+                    items: ['👔 短袖衬衫/雪纺上衣', '👖 九分西裤/及膝铅笔裙', '👞 包头凉鞋/低跟鞋', '💎 小巧耳钉 + 链条包', '🧴 薄款防晒开衫（空调房备用）']
+                },
+                casual: {
+                    title: '轻松自在 舒适日常',
+                    items: ['👕 纯棉T恤/Polo衫', '🩳 休闲短裤/阔腿裤', '👟 运动鞋/小白鞋', '🧢 渔夫帽', '🎒 帆布包']
+                },
+                trendy: {
+                    title: '轻盈时髦 春日气息',
+                    items: ['👔 法式方领上衣/泡泡袖衬衫', '👖 高腰A字裙/开叉半身裙', '👡 细带凉鞋/穆勒鞋', '👒 草编帽 + 藤编包', '💎 夸张耳环 + 多层项链']
+                }
             },
             hot: {
-                tips: '天气炎热！选择透气轻薄面料，注意防暑降温多喝水。',
+                tips: '天气炎热！选择透气轻薄面料，浅色衣物更防晒。注意防暑降温多喝水。',
                 tags: ['炎热', '透气', '防晒'],
-                titles: { commute: '清凉干练 夏日职场', casual: '清凉夏日 舒适自在', trendy: '夏日时髦 清凉吸睛' },
-                items: [
-                    '👔 短袖衬衫 / 雪纺衫',
-                    '👖 九分西裤 / 及膝裙',
-                    '👞 透气单鞋 / 低跟凉鞋',
-                    '💎 简约耳钉 + 链条包',
-                    '🧴 防晒衣（可选）'
-                ]
+                commute: {
+                    title: '清凉专业 夏日职场',
+                    items: ['👔 真丝/雪纺短袖衬衫', '👖 九分阔腿裤/西装短裤', '👞 透气乐福鞋/粗跟凉鞋', '💎 小巧珍珠耳钉 + 链条包', '🕶️ 必备：防晒衣 + 墨镜']
+                },
+                casual: {
+                    title: '清凉解暑 舒适自在',
+                    items: ['👕 背心/短袖T恤/吊带', '🩳 短裤/牛仔热裤/连衣裙', '👡 人字拖/洞洞鞋/凉鞋', '🧢 空顶防晒帽', '🎒 防水沙滩包']
+                },
+                trendy: {
+                    title: '夏日吸睛 清凉时髦',
+                    items: ['👔 露肩上衣/法式吊带/ crop top', '👖 高腰牛仔短裤/开叉长裙', '👡 绑带凉鞋/透明高跟鞋', '🕶️ 超大框墨镜 + 金色首饰', '👜 透明包/迷你小包']
+                }
             }
+        };
+        
+        // ========== 主要城市坐标（精确匹配） ==========
+        const majorCities = {
+            '北京': { lat: 39.9042, lon: 116.4074, admin1: '北京' },
+            '上海': { lat: 31.2304, lon: 121.4737, admin1: '上海' },
+            '广州': { lat: 23.1291, lon: 113.2644, admin1: '广东' },
+            '深圳': { lat: 22.5431, lon: 114.0579, admin1: '广东' },
+            '杭州': { lat: 30.2741, lon: 120.1551, admin1: '浙江' },
+            '成都': { lat: 30.5728, lon: 104.0668, admin1: '四川' },
+            '南京': { lat: 32.0603, lon: 118.7969, admin1: '江苏' },
+            '武汉': { lat: 30.5928, lon: 114.3055, admin1: '湖北' },
+            '西安': { lat: 34.3416, lon: 108.9398, admin1: '陕西' },
+            '重庆': { lat: 29.5630, lon: 106.5516, admin1: '重庆' },
+            '天津': { lat: 39.0842, lon: 117.2009, admin1: '天津' },
+            '苏州': { lat: 31.2989, lon: 120.5853, admin1: '江苏' },
+            '哈尔滨': { lat: 45.8038, lon: 126.5349, admin1: '黑龙江' },
+            '沈阳': { lat: 41.8057, lon: 123.4315, admin1: '辽宁' },
+            '大连': { lat: 38.9140, lon: 121.6147, admin1: '辽宁' },
+            '青岛': { lat: 36.0671, lon: 120.3826, admin1: '山东' },
+            '厦门': { lat: 24.4798, lon: 118.0894, admin1: '福建' },
+            '昆明': { lat: 25.0389, lon: 102.7183, admin1: '云南' },
+            '长沙': { lat: 28.2280, lon: 112.9388, admin1: '湖南' },
+            '郑州': { lat: 34.7466, lon: 113.6253, admin1: '河南' },
+            '济南': { lat: 36.6512, lon: 117.1201, admin1: '山东' },
+            '福州': { lat: 26.0745, lon: 119.2965, admin1: '福建' },
+            '乌鲁木齐': { lat: 43.8256, lon: 87.6168, admin1: '新疆' },
+            '拉萨': { lat: 29.6500, lon: 91.1000, admin1: '西藏' },
+            '海口': { lat: 20.0440, lon: 110.1999, admin1: '海南' },
+            '三亚': { lat: 18.2528, lon: 109.5120, admin1: '海南' },
+            '太原': { lat: 37.8706, lon: 112.5489, admin1: '山西' },
+            '石家庄': { lat: 38.0428, lon: 114.5149, admin1: '河北' },
+            '合肥': { lat: 31.8206, lon: 117.2272, admin1: '安徽' },
+            '南昌': { lat: 28.6820, lon: 115.8579, admin1: '江西' },
+            '贵阳': { lat: 26.6470, lon: 106.6302, admin1: '贵州' },
+            '南宁': { lat: 22.8170, lon: 108.3665, admin1: '广西' },
+            '兰州': { lat: 36.0611, lon: 103.8343, admin1: '甘肃' },
+            '银川': { lat: 38.4872, lon: 106.2309, admin1: '宁夏' },
+            '西宁': { lat: 36.6171, lon: 101.7782, admin1: '青海' },
+            '呼和浩特': { lat: 40.8414, lon: 111.7519, admin1: '内蒙古' },
+            '长春': { lat: 43.8171, lon: 125.3235, admin1: '吉林' },
+            '宁波': { lat: 29.8683, lon: 121.5440, admin1: '浙江' },
+            '无锡': { lat: 31.4912, lon: 120.3119, admin1: '江苏' },
+            '佛山': { lat: 23.0218, lon: 113.1219, admin1: '广东' },
+            '东莞': { lat: 23.0489, lon: 113.7447, admin1: '广东' },
+            '烟台': { lat: 37.4638, lon: 121.4481, admin1: '山东' },
+            '威海': { lat: 37.5091, lon: 122.1206, admin1: '山东' },
+            '珠海': { lat: 22.2710, lon: 113.5670, admin1: '广东' },
+            '中山': { lat: 22.5176, lon: 113.3927, admin1: '广东' },
+            '惠州': { lat: 23.0817, lon: 114.4152, admin1: '广东' },
+            '常州': { lat: 31.8123, lon: 119.9739, admin1: '江苏' },
+            '南通': { lat: 32.0144, lon: 120.8686, admin1: '江苏' },
+            '徐州': { lat: 34.2058, lon: 117.2840, admin1: '江苏' },
+            '温州': { lat: 28.0008, lon: 120.7036, admin1: '浙江' },
+            '绍兴': { lat: 30.0291, lon: 120.5809, admin1: '浙江' },
+            '嘉兴': { lat: 30.7450, lon: 120.7555, admin1: '浙江' },
+            '金华': { lat: 29.0791, lon: 119.6472, admin1: '浙江' },
+            '台州': { lat: 28.6564, lon: 121.4206, admin1: '浙江' },
+            '扬州': { lat: 32.3942, lon: 119.4129, admin1: '江苏' },
+            '镇江': { lat: 32.1877, lon: 119.4230, admin1: '江苏' },
+            '泰州': { lat: 32.4556, lon: 119.9231, admin1: '江苏' },
+            '盐城': { lat: 33.3776, lon: 120.1622, admin1: '江苏' },
+            '淮安': { lat: 33.5518, lon: 119.1132, admin1: '江苏' },
+            '连云港': { lat: 34.6000, lon: 119.1833, admin1: '江苏' },
+            '宿迁': { lat: 33.9630, lon: 118.2755, admin1: '江苏' },
+            '泉州': { lat: 24.8744, lon: 118.6757, admin1: '福建' },
+            '漳州': { lat: 24.5130, lon: 117.6474, admin1: '福建' },
+            '莆田': { lat: 25.4540, lon: 119.0076, admin1: '福建' },
+            '汕头': { lat: 23.3540, lon: 116.7320, admin1: '广东' },
+            '江门': { lat: 22.5791, lon: 113.0815, admin1: '广东' },
+            '湛江': { lat: 21.2707, lon: 110.3594, admin1: '广东' },
+            '肇庆': { lat: 23.0469, lon: 112.4653, admin1: '广东' },
+            '茂名': { lat: 21.6598, lon: 110.9198, admin1: '广东' },
+            '韶关': { lat: 24.8104, lon: 113.5972, admin1: '广东' },
+            '清远': { lat: 23.6820, lon: 113.0560, admin1: '广东' },
+            '阳江': { lat: 21.8592, lon: 111.9751, admin1: '广东' },
+            '梅州': { lat: 24.2886, lon: 116.1222, admin1: '广东' },
+            '揭阳': { lat: 23.5497, lon: 116.3727, admin1: '广东' },
+            '潮州': { lat: 23.6566, lon: 116.6228, admin1: '广东' },
+            '丽水': { lat: 28.4676, lon: 119.9229, admin1: '浙江' },
+            '衢州': { lat: 28.9359, lon: 118.8742, admin1: '浙江' },
+            '湖州': { lat: 30.8931, lon: 120.0880, admin1: '浙江' },
+            '舟山': { lat: 30.0160, lon: 122.1060, admin1: '浙江' },
+            '安庆': { lat: 30.5420, lon: 117.0636, admin1: '安徽' },
+            '芜湖': { lat: 31.3529, lon: 118.4331, admin1: '安徽' },
+            '蚌埠': { lat: 32.9163, lon: 117.3895, admin1: '安徽' },
+            '淮南': { lat: 32.6255, lon: 116.9999, admin1: '安徽' },
+            '马鞍山': { lat: 31.6756, lon: 118.5068, admin1: '安徽' },
+            '淮北': { lat: 33.9558, lon: 116.7983, admin1: '安徽' },
+            '铜陵': { lat: 30.9454, lon: 117.8123, admin1: '安徽' },
+            '黄山': { lat: 29.7147, lon: 118.3375, admin1: '安徽' },
+            '滁州': { lat: 32.3016, lon: 118.3110, admin1: '安徽' },
+            '阜阳': { lat: 32.8906, lon: 115.8142, admin1: '安徽' },
+            '宿州': { lat: 33.6309, lon: 116.9842, admin1: '安徽' },
+            '六安': { lat: 31.7345, lon: 116.5076, admin1: '安徽' },
+            '亳州': { lat: 33.8446, lon: 115.7790, admin1: '安徽' },
+            '池州': { lat: 30.6648, lon: 117.4916, admin1: '安徽' },
+            '宣城': { lat: 30.9407, lon: 118.7587, admin1: '安徽' },
+            '淄博': { lat: 36.8135, lon: 118.0550, admin1: '山东' },
+            '枣庄': { lat: 34.8107, lon: 117.3237, admin1: '山东' },
+            '东营': { lat: 37.4341, lon: 118.6747, admin1: '山东' },
+            '潍坊': { lat: 36.7089, lon: 119.1619, admin1: '山东' },
+            '济宁': { lat: 35.4159, lon: 116.5872, admin1: '山东' },
+            '泰安': { lat: 36.2001, lon: 117.0871, admin1: '山东' },
+            '日照': { lat: 35.4164, lon: 119.5272, admin1: '山东' },
+            '临沂': { lat: 35.1046, lon: 118.3564, admin1: '山东' },
+            '德州': { lat: 37.4355, lon: 116.3593, admin1: '山东' },
+            '聊城': { lat: 36.4560, lon: 115.9804, admin1: '山东' },
+            '滨州': { lat: 37.3835, lon: 117.9714, admin1: '山东' },
+            '菏泽': { lat: 35.2336, lon: 115.4808, admin1: '山东' },
+            '洛阳': { lat: 34.6197, lon: 112.4540, admin1: '河南' },
+            '平顶山': { lat: 33.7661, lon: 113.1928, admin1: '河南' },
+            '安阳': { lat: 36.0977, lon: 114.3931, admin1: '河南' },
+            '鹤壁': { lat: 35.7470, lon: 114.2960, admin1: '河南' },
+            '新乡': { lat: 35.3030, lon: 113.9268, admin1: '河南' },
+            '焦作': { lat: 35.2159, lon: 113.2420, admin1: '河南' },
+            '濮阳': { lat: 35.7619, lon: 115.0292, admin1: '河南' },
+            '许昌': { lat: 34.0357, lon: 113.8525, admin1: '河南' },
+            '漯河': { lat: 33.5815, lon: 114.0165, admin1: '河南' },
+            '三门峡': { lat: 34.7732, lon: 111.2003, admin1: '河南' },
+            '南阳': { lat: 32.9908, lon: 112.5283, admin1: '河南' },
+            '商丘': { lat: 34.4145, lon: 115.6564, admin1: '河南' },
+            '信阳': { lat: 32.1470, lon: 114.0912, admin1: '河南' },
+            '周口': { lat: 33.6261, lon: 114.6970, admin1: '河南' },
+            '驻马店': { lat: 33.0115, lon: 114.0223, admin1: '河南' },
+            '宜昌': { lat: 30.6919, lon: 111.2865, admin1: '湖北' },
+            '襄阳': { lat: 32.0090, lon: 112.1225, admin1: '湖北' },
+            '鄂州': { lat: 30.3910, lon: 114.8948, admin1: '湖北' },
+            '荆门': { lat: 31.0354, lon: 112.1994, admin1: '湖北' },
+            '孝感': { lat: 30.9175, lon: 113.9570, admin1: '湖北' },
+            '荆州': { lat: 30.3349, lon: 112.2397, admin1: '湖北' },
+            '黄冈': { lat: 30.4539, lon: 114.8720, admin1: '湖北' },
+            '咸宁': { lat: 29.8417, lon: 114.3225, admin1: '湖北' },
+            '随州': { lat: 31.6900, lon: 113.3825, admin1: '湖北' },
+            '恩施': { lat: 30.2722, lon: 109.4882, admin1: '湖北' },
+            '株洲': { lat: 27.8278, lon: 113.1330, admin1: '湖南' },
+            '湘潭': { lat: 27.8297, lon: 112.9445, admin1: '湖南' },
+            '衡阳': { lat: 26.8932, lon: 112.5720, admin1: '湖南' },
+            '邵阳': { lat: 27.2390, lon: 111.4678, admin1: '湖南' },
+            '岳阳': { lat: 29.3570, lon: 113.1292, admin1: '湖南' },
+            '常德': { lat: 29.0316, lon: 111.6988, admin1: '湖南' },
+            '张家界': { lat: 29.1171, lon: 110.4792, admin1: '湖南' },
+            '益阳': { lat: 28.5540, lon: 112.3552, admin1: '湖南' },
+            '郴州': { lat: 25.7705, lon: 113.0147, admin1: '湖南' },
+            '永州': { lat: 26.4204, lon: 111.5957, admin1: '湖南' },
+            '怀化': { lat: 27.5501, lon: 109.9985, admin1: '湖南' },
+            '娄底': { lat: 27.7281, lon: 112.0084, admin1: '湖南' },
+            '唐山': { lat: 39.6292, lon: 118.1802, admin1: '河北' },
+            '秦皇岛': { lat: 39.9354, lon: 119.5982, admin1: '河北' },
+            '邯郸': { lat: 36.6093, lon: 114.4910, admin1: '河北' },
+            '邢台': { lat: 37.0659, lon: 114.5047, admin1: '河北' },
+            '保定': { lat: 38.8739, lon: 115.4646, admin1: '河北' },
+            '张家口': { lat: 40.7676, lon: 114.8863, admin1: '河北' },
+            '承德': { lat: 40.9510, lon: 117.9328, admin1: '河北' },
+            '沧州': { lat: 38.3037, lon: 116.8388, admin1: '河北' },
+            '廊坊': { lat: 39.5380, lon: 116.6837, admin1: '河北' },
+            '衡水': { lat: 37.7350, lon: 115.6860, admin1: '河北' },
+            '大同': { lat: 40.0764, lon: 113.3000, admin1: '山西' },
+            '阳泉': { lat: 37.8567, lon: 113.5780, admin1: '山西' },
+            '长治': { lat: 36.1954, lon: 113.1163, admin1: '山西' },
+            '晋城': { lat: 35.4907, lon: 112.8518, admin1: '山西' },
+            '朔州': { lat: 39.3316, lon: 112.4330, admin1: '山西' },
+            '晋中': { lat: 37.6870, lon: 112.7527, admin1: '山西' },
+            '运城': { lat: 35.0264, lon: 111.0070, admin1: '山西' },
+            '忻州': { lat: 38.4166, lon: 112.7342, admin1: '山西' },
+            '临汾': { lat: 36.0883, lon: 111.5196, admin1: '山西' },
+            '吕梁': { lat: 37.5193, lon: 111.1422, admin1: '山西' },
+            '包头': { lat: 40.6574, lon: 109.8403, admin1: '内蒙古' },
+            '乌海': { lat: 39.6554, lon: 106.7953, admin1: '内蒙古' },
+            '赤峰': { lat: 42.2578, lon: 118.8869, admin1: '内蒙古' },
+            '通辽': { lat: 43.6525, lon: 122.2443, admin1: '内蒙古' },
+            '鄂尔多斯': { lat: 39.6083, lon: 109.7810, admin1: '内蒙古' },
+            '呼伦贝尔': { lat: 49.2116, lon: 119.7657, admin1: '内蒙古' },
+            '巴彦淖尔': { lat: 40.7432, lon: 107.3877, admin1: '内蒙古' },
+            '乌兰察布': { lat: 41.0006, lon: 113.1340, admin1: '内蒙古' },
+            '兴安': { lat: 46.0833, lon: 122.0667, admin1: '内蒙古' },
+            '锡林郭勒': { lat: 43.9333, lon: 116.0667, admin1: '内蒙古' },
+            '阿拉善': { lat: 38.8333, lon: 105.6667, admin1: '内蒙古' },
+            '鞍山': { lat: 41.1079, lon: 122.9946, admin1: '辽宁' },
+            '抚顺': { lat: 41.8809, lon: 123.9572, admin1: '辽宁' },
+            '本溪': { lat: 41.2942, lon: 123.7665, admin1: '辽宁' },
+            '丹东': { lat: 40.1244, lon: 124.3700, admin1: '辽宁' },
+            '锦州': { lat: 41.0951, lon: 121.1270, admin1: '辽宁' },
+            '营口': { lat: 40.6668, lon: 122.2349, admin1: '辽宁' },
+            '阜新': { lat: 42.0217, lon: 121.6703, admin1: '辽宁' },
+            '辽阳': { lat: 41.2671, lon: 123.2374, admin1: '辽宁' },
+            '盘锦': { lat: 41.1240, lon: 122.0700, admin1: '辽宁' },
+            '铁岭': { lat: 42.2235, lon: 123.7260, admin1: '辽宁' },
+            '朝阳': { lat: 41.5757, lon: 120.4500, admin1: '辽宁' },
+            '葫芦岛': { lat: 40.7510, lon: 120.8365, admin1: '辽宁' },
+            '吉林': { lat: 43.8500, lon: 126.5500, admin1: '吉林' },
+            '四平': { lat: 43.1703, lon: 124.3703, admin1: '吉林' },
+            '辽源': { lat: 42.8880, lon: 125.1437, admin1: '吉林' },
+            '通化': { lat: 41.7284, lon: 125.9573, admin1: '吉林' },
+            '白山': { lat: 41.9432, lon: 126.4240, admin1: '吉林' },
+            '松原': { lat: 45.1108, lon: 124.8240, admin1: '吉林' },
+            '白城': { lat: 45.6196, lon: 122.8390, admin1: '吉林' },
+            '延边': { lat: 42.9048, lon: 129.5080, admin1: '吉林' },
+            '齐齐哈尔': { lat: 47.3420, lon: 123.9176, admin1: '黑龙江' },
+            '鸡西': { lat: 45.2952, lon: 130.9690, admin1: '黑龙江' },
+            '鹤岗': { lat: 47.3500, lon: 130.2667, admin1: '黑龙江' },
+            '双鸭山': { lat: 46.6434, lon: 131.1577, admin1: '黑龙江' },
+            '大庆': { lat: 46.5891, lon: 125.1038, admin1: '黑龙江' },
+            '伊春': { lat: 47.7275, lon: 128.8411, admin1: '黑龙江' },
+            '佳木斯': { lat: 46.7998, lon: 130.3188, admin1: '黑龙江' },
+            '七台河': { lat: 45.7700, lon: 131.0000, admin1: '黑龙江' },
+            '牡丹江': { lat: 44.5527, lon: 129.6330, admin1: '黑龙江' },
+            '黑河': { lat: 50.2449, lon: 127.4895, admin1: '黑龙江' },
+            '绥化': { lat: 46.6540, lon: 126.9690, admin1: '黑龙江' },
+            '大兴安岭': { lat: 52.3352, lon: 124.3936, admin1: '黑龙江' },
+            '柳州': { lat: 24.3255, lon: 109.4155, admin1: '广西' },
+            '桂林': { lat: 25.2740, lon: 110.2993, admin1: '广西' },
+            '梧州': { lat: 23.4769, lon: 111.2791, admin1: '广西' },
+            '北海': { lat: 21.4750, lon: 109.1000, admin1: '广西' },
+            '防城港': { lat: 21.6867, lon: 108.3547, admin1: '广西' },
+            '钦州': { lat: 21.9500, lon: 108.6167, admin1: '广西' },
+            '贵港': { lat: 23.1115, lon: 109.5989, admin1: '广西' },
+            '玉林': { lat: 22.6314, lon: 110.1544, admin1: '广西' },
+            '百色': { lat: 23.9022, lon: 106.6183, admin1: '广西' },
+            '贺州': { lat: 24.4168, lon: 111.5666, admin1: '广西' },
+            '河池': { lat: 24.6928, lon: 108.0850, admin1: '广西' },
+            '来宾': { lat: 23.7521, lon: 109.2215, admin1: '广西' },
+            '崇左': { lat: 22.4041, lon: 107.3650, admin1: '广西' },
+            '三亚': { lat: 18.2528, lon: 109.5120, admin1: '海南' },
+            '三沙': { lat: 16.8310, lon: 112.3386, admin1: '海南' },
+            '儋州': { lat: 19.5209, lon: 109.5808, admin1: '海南' },
+            '五指山': { lat: 18.7752, lon: 109.5170, admin1: '海南' },
+            '琼海': { lat: 19.2584, lon: 110.4668, admin1: '海南' },
+            '文昌': { lat: 19.6127, lon: 110.7543, admin1: '海南' },
+            '万宁': { lat: 18.7952, lon: 110.3895, admin1: '海南' },
+            '东方': { lat: 19.0953, lon: 108.6510, admin1: '海南' },
+            '定安': { lat: 19.6814, lon: 110.3593, admin1: '海南' },
+            '屯昌': { lat: 19.3518, lon: 110.1021, admin1: '海南' },
+            '澄迈': { lat: 19.7371, lon: 110.0048, admin1: '海南' },
+            '临高': { lat: 19.9128, lon: 109.6908, admin1: '海南' },
+            '白沙': { lat: 19.2253, lon: 109.4517, admin1: '海南' },
+            '昌江': { lat: 19.2985, lon: 109.0554, admin1: '海南' },
+            '乐东': { lat: 18.7483, lon: 109.1675, admin1: '海南' },
+            '陵水': { lat: 18.5060, lon: 110.0372, admin1: '海南' },
+            '保亭': { lat: 18.6391, lon: 109.7025, admin1: '海南' },
+            '琼中': { lat: 19.0333, lon: 109.8333, admin1: '海南' }
         };
         
         // ========== 平台检测 ==========
@@ -557,7 +808,6 @@
             isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
         };
         
-        // 显示平台信息
         let platformText = '';
         if (platform.isWechat) platformText = '微信内置浏览器';
         else if (platform.isIOS) platformText = 'iOS 设备';
@@ -565,7 +815,6 @@
         else platformText = '电脑端';
         document.getElementById('platformInfo').textContent = `当前：${platformText}`;
         
-        // 根据平台调整按钮文字
         if (platform.isMobile && !platform.isWechat) {
             document.getElementById('commuteBtnText').textContent = '打开小红书App';
             document.getElementById('casualBtnText').textContent = '打开小红书App';
@@ -573,11 +822,7 @@
         }
         
         // ========== 搜索关键词存储 ==========
-        let searchKeywords = {
-            commute: '',
-            casual: '',
-            trendy: ''
-        };
+        let searchKeywords = { commute: '', casual: '', trendy: '' };
         
         // ========== 核心功能 ==========
         function setCity(city) {
@@ -586,30 +831,57 @@
         }
         
         async function searchCity() {
-            const city = document.getElementById('cityInput').value.trim();
-            if (!city) { showError('请输入城市名称'); return; }
+            const cityInput = document.getElementById('cityInput').value.trim();
+            if (!cityInput) { showError('请输入城市名称'); return; }
             
             document.getElementById('loadingState').classList.remove('hidden');
             document.getElementById('errorContainer').innerHTML = '';
             document.getElementById('searchBtn').disabled = true;
             
             try {
-                const searchName = city.endsWith('市') ? city : city + '市';
-                const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchName)}&count=10&language=zh&format=json`);
-                const geoData = await geoRes.json();
+                let location;
                 
-                if (!geoData.results?.length) throw new Error('未找到该城市，请检查城市名称');
+                // 1. 先检查是否是主要城市（精确匹配）
+                const cityKey = cityInput.replace(/市$/, '');
+                if (majorCities[cityKey]) {
+                    location = {
+                        name: cityKey,
+                        latitude: majorCities[cityKey].lat,
+                        longitude: majorCities[cityKey].lon,
+                        admin1: majorCities[cityKey].admin1,
+                        country: '中国',
+                        elevation: 50
+                    };
+                } else {
+                    // 2. API搜索其他城市
+                    const searchName = cityInput.endsWith('市') ? cityInput : cityInput + '市';
+                    const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchName)}&count=20&language=zh&format=json`);
+                    const geoData = await geoRes.json();
+                    
+                    if (!geoData.results?.length) throw new Error('未找到该城市，请检查城市名称');
+                    
+                    // 严格筛选：只选中国大陆的结果，排除国外
+                    const chinaResults = geoData.results.filter(r => 
+                        r.country_code === 'CN' && 
+                        r.country === '中国' &&
+                        !['美国', '加拿大', '澳大利亚', '英国', '日本', '韩国'].includes(r.country)
+                    );
+                    
+                    if (!chinaResults.length) throw new Error('未找到该城市（仅支持中国境内城市）');
+                    
+                    // 优先选择省辖市级别的（通常人口更多）
+                    location = chinaResults.find(r => r.feature_code === 'PPLA') || 
+                               chinaResults.find(r => r.population && r.population > 100000) ||
+                               chinaResults[0];
+                }
                 
-                let loc = geoData.results.find(r => r.country_code === 'CN' && (r.name === city || r.name === searchName));
-                if (!loc) loc = geoData.results.find(r => r.country_code === 'CN');
-                if (!loc) loc = geoData.results[0];
-                
-                const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc.latitude}&longitude=${loc.longitude}&daily=temperature_2m_max,temperature_2m_min,weather_code&current=wind_speed_10m,wind_direction_10m&timezone=auto&forecast_days=2`);
+                // 3. 获取天气数据
+                const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&daily=temperature_2m_max,temperature_2m_min,weather_code&current=wind_speed_10m,wind_direction_10m&timezone=auto&forecast_days=2`);
                 const weatherData = await weatherRes.json();
                 
                 if (!weatherData.daily || !weatherData.current) throw new Error('天气数据格式错误');
                 
-                updatePage(loc, weatherData);
+                updatePage(location, weatherData);
             } catch (err) {
                 console.error(err);
                 showError(err.message || '获取天气数据失败');
@@ -634,7 +906,7 @@
             
             const wInfo = weatherCodes[code] || { icon: '☁️', desc: '多云' };
             
-            // 位置
+            // 位置信息
             document.getElementById('locationName').textContent = loc.name;
             document.getElementById('locationDetail').textContent = loc.admin1 ? `中国 · ${loc.admin1}` : '中国';
             
@@ -650,13 +922,8 @@
             document.getElementById('weatherDesc').textContent = wInfo.desc;
             document.getElementById('windInfo').textContent = `${wind.icon} ${windDir}风 ${wind.level} · ${wind.desc}`;
             
-            // 体感温度计算
-            let avgT = (maxT + minT) / 2;
-            const isHighAltitude = loc.elevation > 1500;
-            const isSouthernWet = ['广东','广西','福建','海南'].includes(loc.admin1);
-            
-            if (isHighAltitude) avgT -= 3;
-            if (isSouthernWet && avgT < 15) avgT -= 2;
+            // 计算温度区间（使用平均温度）
+            const avgT = (maxT + minT) / 2;
             
             let zone;
             if (avgT < 0) zone = 'freezing';
@@ -672,38 +939,29 @@
                 let cls = zone === 'hot' ? 'hot' : (zone === 'cold' || zone === 'freezing') ? 'cold' : code >= 50 ? 'rain' : 'highlight';
                 return `<span class="tag ${cls}">${t}</span>`;
             }).join('');
-            
-            if (isHighAltitude) tagsHtml += `<span class="tag" style="background:#fff3e0;color:#e65100">☀️ 高海拔</span>`;
-            if (isSouthernWet && avgT < 15) tagsHtml += `<span class="tag" style="background:#e8f5e9;color:#2e7d32">💧 湿冷</span>`;
-            
             document.getElementById('weatherTags').innerHTML = tagsHtml;
             
             // 提示
-            let tips = outfit.tips;
-            if (isHighAltitude) tips += ' 高原紫外线强，注意防晒。';
-            if (isSouthernWet && avgT < 15) tips += ' 南方湿冷，建议穿防水外套。';
-            document.getElementById('tipsContent').textContent = tips;
+            document.getElementById('tipsContent').textContent = outfit.tips;
             
             // 图片
             document.getElementById('commuteImage').innerHTML = `<img src="${outfitImgs[zone]}" alt="通勤">`;
             document.getElementById('casualImage').innerHTML = `<img src="${outfitImgs[zone]}" alt="休闲">`;
             document.getElementById('trendyImage').innerHTML = `<img src="${outfitImgs[zone]}" alt="时髦">`;
             
-            // 标题和列表
-            document.getElementById('commuteTitle').textContent = outfit.titles.commute;
-            document.getElementById('casualTitle').textContent = outfit.titles.casual;
-            document.getElementById('trendyTitle').textContent = outfit.titles.trendy;
+            // 标题和列表 - 三种风格完全不同
+            document.getElementById('commuteTitle').textContent = outfit.commute.title;
+            document.getElementById('casualTitle').textContent = outfit.casual.title;
+            document.getElementById('trendyTitle').textContent = outfit.trendy.title;
             
-            const itemsHtml = outfit.items.map(i => `<li>${i}</li>`).join('');
-            document.getElementById('commuteItems').innerHTML = itemsHtml;
-            document.getElementById('casualItems').innerHTML = itemsHtml;
-            document.getElementById('trendyItems').innerHTML = itemsHtml;
+            document.getElementById('commuteItems').innerHTML = outfit.commute.items.map(i => `<li>${i}</li>`).join('');
+            document.getElementById('casualItems').innerHTML = outfit.casual.items.map(i => `<li>${i}</li>`).join('');
+            document.getElementById('trendyItems').innerHTML = outfit.trendy.items.map(i => `<li>${i}</li>`).join('');
             
             // 保存搜索关键词
-            const cityName = loc.name.replace('（示例）', '');
-            searchKeywords.commute = `${cityName} 通勤穿搭 ${maxT}度`;
-            searchKeywords.casual = `${cityName} 休闲穿搭`;
-            searchKeywords.trendy = `${cityName} 时尚穿搭`;
+            searchKeywords.commute = `${loc.name} 通勤穿搭 ${maxT}度`;
+            searchKeywords.casual = `${loc.name} 休闲穿搭`;
+            searchKeywords.trendy = `${loc.name} 时尚穿搭`;
         }
         
         // ========== 小红书链接处理 ==========
@@ -711,42 +969,21 @@
             const keyword = searchKeywords[type];
             if (!keyword) return;
             
-            // 电脑端：直接打开网页
             if (!platform.isMobile) {
                 window.open(`https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(keyword)}`, '_blank');
                 return;
             }
             
-            // 手机端：尝试打开App
             const encodedKeyword = encodeURIComponent(keyword);
-            let scheme;
+            const scheme = platform.isIOS 
+                ? `xhsdiscover://search/result?keyword=${encodedKeyword}`
+                : `xhsdiscovery://search/result?keyword=${encodedKeyword}`;
             
-            if (platform.isIOS) {
-                scheme = `xhsdiscover://search/result?keyword=${encodedKeyword}`;
-            } else {
-                scheme = `xhsdiscovery://search/result?keyword=${encodedKeyword}`;
-            }
-            
-            // 记录打开时间
-            const startTime = Date.now();
-            
-            // 尝试打开App
             window.location.href = scheme;
             
-            // 2秒后检查是否成功打开
             setTimeout(() => {
-                const endTime = Date.now();
-                // 如果时间差小于2秒，说明App没有打开（用户还在当前页面）
-                if (endTime - startTime < 2200) {
-                    // 显示提示
-                    showToast('正在打开小红书...');
-                    
-                    // 再等待一下，如果没跳转，提供备选方案
-                    setTimeout(() => {
-                        if (confirm('未检测到小红书App，是否使用网页版查看？')) {
-                            window.open(`https://www.xiaohongshu.com/search_result?keyword=${encodedKeyword}`, '_blank');
-                        }
-                    }, 500);
+                if (confirm('未检测到小红书App，是否使用网页版查看？')) {
+                    window.open(`https://www.xiaohongshu.com/search_result?keyword=${encodedKeyword}`, '_blank');
                 }
             }, 2000);
         }
@@ -758,20 +995,15 @@
             const url = `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(keyword)}`;
             
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(url).then(() => {
-                    showToast('链接已复制到剪贴板！');
-                }).catch(() => {
-                    // 降级方案
-                    const input = document.createElement('input');
-                    input.value = url;
-                    document.body.appendChild(input);
-                    input.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(input);
-                    showToast('链接已复制！');
-                });
+                navigator.clipboard.writeText(url).then(() => showToast('链接已复制！'));
             } else {
-                showToast(url);
+                const input = document.createElement('input');
+                input.value = url;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                showToast('链接已复制！');
             }
         }
         
