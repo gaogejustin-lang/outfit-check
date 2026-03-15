@@ -775,6 +775,11 @@
             try {
                 // 1. 获取城市坐标
                 const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=zh&format=json`);
+                
+                if (!geoResponse.ok) {
+                    throw new Error('网络请求失败，请检查网络连接');
+                }
+                
                 const geoData = await geoResponse.json();
                 
                 if (!geoData.results || geoData.results.length === 0) {
@@ -785,13 +790,29 @@
                 
                 // 2. 获取天气数据（包含风速）
                 const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&daily=temperature_2m_max,temperature_2m_min,weather_code&current=wind_speed_10m,wind_direction_10m&timezone=auto&forecast_days=2`);
+                
+                if (!weatherResponse.ok) {
+                    throw new Error('获取天气数据失败');
+                }
+                
                 const weatherData = await weatherResponse.json();
+                
+                // 检查数据结构
+                if (!weatherData.daily || !weatherData.current) {
+                    throw new Error('天气数据格式错误');
+                }
                 
                 // 3. 更新页面
                 updatePage(location, weatherData);
                 
             } catch (error) {
+                console.error('搜索错误:', error);
                 showError(error.message || '获取天气数据失败，请稍后重试');
+                
+                // 如果是示例数据，保持显示；否则显示错误
+                if (!document.getElementById('locationName').textContent.includes('示例')) {
+                    // 可以在这里添加降级显示
+                }
             } finally {
                 document.getElementById('loadingState').classList.add('hidden');
                 document.getElementById('searchBtn').disabled = false;
@@ -938,14 +959,6 @@
             }
         });
         
-        // 页面加载时显示默认内容
-        window.addEventListener('load', function() {
-            // 先显示默认内容（北京示例）
-            showDefaultContent();
-            // 然后尝试获取真实数据
-            searchCity();
-        });
-        
         // 显示默认内容
         function showDefaultContent() {
             const defaultLocation = { name: '北京（示例）', country: '中国', admin1: '' };
@@ -959,6 +972,11 @@
             };
             updatePage(defaultLocation, defaultWeather);
         }
+        
+        // 页面加载时只显示默认内容，不自动搜索
+        window.addEventListener('load', function() {
+            showDefaultContent();
+        });
     </script>
 </body>
 </html>
