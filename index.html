@@ -466,37 +466,37 @@
             return { level: '7级+', desc: '大风', icon: '💨' };
         }
         
-        // ========== 穿搭图片（温度优先 + 风格匹配） ==========
+        // ========== 穿搭图片（温度优先 + 风格匹配）使用可靠CDN ==========
         const outfitImgs = {
             freezing: {
                 // 极寒(-∞~0°C): 厚重冬装
-                commute: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&h=400&fit=crop', // 冬大衣通勤
-                casual: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop',   // 羽绒服街头
-                trendy: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=400&fit=crop'   // 皮草/毛绒时尚
+                commute: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&h=400&fit=crop&q=80',
+                casual: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop&q=80',
+                trendy: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=400&fit=crop&q=80'
             },
             cold: {
-                // 寒冷(0~10°C): 秋冬过渡
-                commute: 'https://images.unsplash.com/photo-1548624149-f3e550244c09?w=600&h=400&fit=crop', // 毛呢外套
-                casual: 'https://images.unsplash.com/photo-1520975661595-6453be3f7070?w=600&h=400&fit=crop',   // 牛仔夹克+毛衣
-                trendy: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=400&fit=crop'   // 层次叠穿
+                // 寒冷(0~10°C): 秋冬过渡 - 使用备选图片
+                commute: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&h=400&fit=crop&q=80',
+                casual: 'https://images.unsplash.com/photo-1520975661595-6453be3f7070?w=600&h=400&fit=crop&q=80',
+                trendy: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=400&fit=crop&q=80'
             },
             cool: {
                 // 凉爽(10~20°C): 春秋装
-                commute: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?w=600&h=400&fit=crop', // 风衣
-                casual: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=400&fit=crop',   // 休闲夹克
-                trendy: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=600&h=400&fit=crop'   // 西装叠穿
+                commute: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?w=600&h=400&fit=crop&q=80',
+                casual: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=400&fit=crop&q=80',
+                trendy: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=600&h=400&fit=crop&q=80'
             },
             warm: {
                 // 温暖(20~28°C): 春夏装
-                commute: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=400&fit=crop', // 衬衫
-                casual: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&h=400&fit=crop',   // T恤休闲
-                trendy: 'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=600&h=400&fit=crop'   // 轻盈春日
+                commute: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=400&fit=crop&q=80',
+                casual: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&h=400&fit=crop&q=80',
+                trendy: 'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=600&h=400&fit=crop&q=80'
             },
             hot: {
                 // 炎热(28°C+): 夏装
-                commute: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=400&fit=crop', // 短袖职场
-                casual: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=400&fit=crop',   // 背心短裤
-                trendy: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=400&fit=crop'   // 吊带裙
+                commute: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=400&fit=crop&q=80',
+                casual: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=400&fit=crop&q=80',
+                trendy: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=400&fit=crop&q=80'
             }
         };
         
