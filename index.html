@@ -526,10 +526,11 @@
                             <li>👞 乐福鞋 / 切尔西靴</li>
                             <li>💎 简约金属项链 + 皮质手提包</li>
                         </ul>
-                        <a href="#" class="xiaohongshu-link" id="commuteLink" target="_blank">
+                        <a href="#" class="xiaohongshu-link" id="commuteLink" target="_blank" onclick="return handleXHSLink(this);">
                             <span>📕</span>
                             <span>小红书查看搭配图</span>
                         </a>
+                        <div class="xhs-hint" id="commuteHint" style="display:none; font-size:12px; color:#999; margin-top:5px;">💡 微信内无法跳转，请复制链接到浏览器打开</div>
                     </div>
                 </div>
             </div>
@@ -550,10 +551,11 @@
                             <li>👟 运动鞋 / 老爹鞋</li>
                             <li>🧢 棒球帽 + 帆布袋</li>
                         </ul>
-                        <a href="#" class="xiaohongshu-link" id="casualLink" target="_blank">
+                        <a href="#" class="xiaohongshu-link" id="casualLink" target="_blank" onclick="return handleXHSLink(this);">
                             <span>📕</span>
                             <span>小红书查看搭配图</span>
                         </a>
+                        <div class="xhs-hint" id="casualHint" style="display:none; font-size:12px; color:#999; margin-top:5px;">💡 微信内无法跳转，请复制链接到浏览器打开</div>
                     </div>
                 </div>
             </div>
@@ -574,10 +576,11 @@
                             <li>👢 短靴 / 厚底乐福鞋</li>
                             <li>🕶️ 复古手链 + 宽边太阳镜</li>
                         </ul>
-                        <a href="#" class="xiaohongshu-link" id="trendyLink" target="_blank">
+                        <a href="#" class="xiaohongshu-link" id="trendyLink" target="_blank" onclick="return handleXHSLink(this);">
                             <span>📕</span>
                             <span>小红书查看搭配图</span>
                         </a>
+                        <div class="xhs-hint" id="trendyHint" style="display:none; font-size:12px; color:#999; margin-top:5px;">💡 微信内无法跳转，请复制链接到浏览器打开</div>
                     </div>
                 </div>
             </div>
@@ -1044,6 +1047,41 @@
                 current: { wind_speed_10m: 5, wind_direction_10m: 45 }
             };
             updatePage(defaultLocation, defaultWeather);
+        }
+        
+        // 处理小红书链接点击
+        function handleXHSLink(link) {
+            const href = link.getAttribute('href');
+            if (href === '#' || !href) {
+                return false;
+            }
+            
+            // 检测是否是微信内置浏览器
+            const isWechat = /MicroMessenger/i.test(navigator.userAgent);
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isWechat || isMobile) {
+                // 显示提示
+                const hintId = link.id.replace('Link', 'Hint');
+                const hint = document.getElementById(hintId);
+                if (hint) {
+                    hint.style.display = 'block';
+                }
+                
+                // 复制链接到剪贴板
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(href).then(() => {
+                        alert('🔗 链接已复制！\n\n由于微信限制，请在手机浏览器中打开小红书。\n\n链接已复制到剪贴板，可直接粘贴访问。');
+                    }).catch(() => {
+                        alert('🔗 请在浏览器中打开\n\n由于微信限制，无法直接跳转小红书。\n请用 Safari/Chrome 打开本页面。');
+                    });
+                } else {
+                    alert('🔗 请在浏览器中打开\n\n由于微信限制，无法直接跳转小红书。\n请用 Safari/Chrome 打开本页面。');
+                }
+                return false;
+            }
+            
+            return true;
         }
         
         // 页面加载时只显示默认内容，不自动搜索
