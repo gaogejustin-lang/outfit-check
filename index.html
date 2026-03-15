@@ -466,32 +466,37 @@
             return { level: '7级+', desc: '大风', icon: '💨' };
         }
         
-        // ========== 穿搭图片（2026年风格） ==========
+        // ========== 穿搭图片（2026年风格 × 温度匹配） ==========
         const outfitImgs = {
             freezing: {
-                commute: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop', // 专业通勤
-                casual: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=400&fit=crop',   // 温暖休闲
-                trendy: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=400&fit=crop'   // 时髦街拍
+                // 零下极寒：厚重大衣、羽绒服、围巾手套
+                commute: 'https://images.unsplash.com/photo-1548624149-f3e550244c09?w=600&h=400&fit=crop', // 驼色长大衣通勤
+                casual: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop',   // 厚实羽绒服休闲
+                trendy: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=400&fit=crop'   // 皮草围巾时髦街拍
             },
             cold: {
-                commute: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&h=400&fit=crop',  // 优雅通勤
-                casual: 'https://images.unsplash.com/photo-1520975661595-6453be3f7070?w=600&h=400&fit=crop',   // 街头休闲
-                trendy: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=400&fit=crop'   // 时髦混搭
+                // 寒冷：毛呢大衣、高领毛衣、叠穿
+                commute: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=400&fit=crop',  // 黑色毛呢大衣知性
+                casual: 'https://images.unsplash.com/photo-1520975661595-6453be3f7070?w=600&h=400&fit=crop',   // 牛仔外套+高领毛衣
+                trendy: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=400&fit=crop'   // 层次叠穿时髦
             },
             cool: {
-                commute: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?w=600&h=400&fit=crop',  // 风衣通勤
-                casual: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&h=400&fit=crop',   // 休闲牛仔
-                trendy: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=600&h=400&fit=crop'   // 时髦层次
+                // 凉爽：风衣、薄外套、衬衫
+                commute: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?w=600&h=400&fit=crop',  // 卡其风衣干练
+                casual: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=400&fit=crop',   // 牛仔夹克休闲
+                trendy: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=600&h=400&fit=crop'   // 西装外套叠穿时髦
             },
             warm: {
-                commute: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=400&fit=crop',  // 轻盈职场
-                casual: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&h=400&fit=crop',   // 轻松休闲
-                trendy: 'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=600&h=400&fit=crop'   // 时髦春日
+                // 温暖：薄衬衫、单穿、轻盈
+                commute: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=400&fit=crop',  // 衬衫西裤职场
+                casual: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&h=400&fit=crop',   // T恤牛仔裤轻松
+                trendy: 'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=600&h=400&fit=crop'   // 法式上衣半裙春日
             },
             hot: {
-                commute: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=400&fit=crop',  // 清凉职场
-                casual: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=400&fit=crop',   // 夏日休闲
-                trendy: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=400&fit=crop'   // 时髦清凉
+                // 炎热：短袖、吊带、清凉
+                commute: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=400&fit=crop',  // 短袖衬衫职场清凉
+                casual: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=400&fit=crop',   // 背心短裤夏日
+                trendy: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=400&fit=crop'   // 吊带裙露肩清凉时髦
             }
         };
         
